@@ -1,0 +1,19 @@
+package characters;
+
+public enum Race {
+	ORC,
+	HUMAN,
+	ELF,
+	DWARF,
+	HALFLING,
+	DRAGONBORN,
+	GNOME,
+	HALF_ELF,
+	HALF_ORC,
+	DEMON,
+	MINOTAUR,
+	CENTAUR,
+	GOBLIN,
+	AVEN,
+	LEONIN
+}

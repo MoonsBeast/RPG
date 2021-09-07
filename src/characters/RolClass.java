@@ -1,0 +1,17 @@
+package characters;
+
+public enum RolClass {
+	ARTIFICER,
+	BARBARIAN,
+	BARD,
+	CLERIC,
+	DRUID,
+	FIGHTER,
+	MONK,
+	PALADIN,
+	RANGER,
+	ROGUE,
+	SORCERER,
+	WARLOCK,
+	WIZARD
+}

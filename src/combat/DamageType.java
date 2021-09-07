@@ -1,0 +1,17 @@
+package combat;
+
+public enum DamageType {
+	SLASHING,
+	PIERCING,
+	BLUGGEONING,
+	POISON,
+	ACID,
+	FIRE,
+	COLD,
+	RADIANT,
+	NECROTIC,
+	LIGHTNING,
+	THUNDER,
+	FORCE,
+	PSYCHIC
+}
