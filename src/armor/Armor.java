@@ -1,19 +1,15 @@
 package armor;
 
-import characters.Character;
+import combat.AttackAction;
 
-public class Armor extends Character{
-	
-	private Character decoratedCharacter;
+public class Armor{
+
 	private int defense;
+	private ArmorPart armorPart;
 	
-	Armor(int defense){
+	public Armor(int defense, ArmorPart armorPart){
 		this.defense = defense;
-	}
-	
-	Armor(Character character,int defense){
-		this.setDecoratedCharacter(character);
-		this.defense = defense;
+		this.armorPart = armorPart;
 	}
 
 	public int getDefense() {
@@ -24,11 +20,16 @@ public class Armor extends Character{
 		this.defense = defense;
 	}
 
-	public Character getDecoratedCharacter() {
-		return decoratedCharacter;
+	public ArmorPart getArmorPart() {
+		return armorPart;
 	}
 
-	public void setDecoratedCharacter(Character decoratedCharacter) {
-		this.decoratedCharacter = decoratedCharacter;
+	public void setArmorPart(ArmorPart armorPart) {
+		this.armorPart = armorPart;
+	}
+	
+	//Paso un AttackAction porque alguna armadura puede ser vulnerable o resistente a ciertos elementos
+	public int calculateDefense(AttackAction attack) { 
+		return this.defense;
 	}
 }

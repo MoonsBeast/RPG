@@ -8,8 +8,6 @@ public enum Race {
 	HALFLING,
 	DRAGONBORN,
 	GNOME,
-	HALF_ELF,
-	HALF_ORC,
 	DEMON,
 	MINOTAUR,
 	CENTAUR,
