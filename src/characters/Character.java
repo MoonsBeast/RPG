@@ -2,6 +2,7 @@ package characters;
 
 import armor.Armor;
 import armor.ArmorPart;
+import combat.AttackAction;
 import spellbooks.Spellbook;
 import weapons.Weapon;
 
@@ -15,15 +16,28 @@ public class Character {
 	private Spellbook spellbook;
 	
 	public Character(int level, Race race, RolClass rolClass) {
-		// TODO Auto-generated constructor stub
+		this.level = level;
+		this.race = race;
+		this.rolClass = rolClass;
+		this.armor = calculateBaseArmor();
+		this.life = calculateLife();
+		this.mana = calculateMana();
 	}
 	
 	public Character(int level, Race race, RolClass rolClass, Weapon rightWeapon, Weapon leftWeapon, Spellbook spellbook) {
-		// TODO Auto-generated constructor stub
+		this.level = level;
+		this.race = race;
+		this.rolClass = rolClass;
+		this.rightWeapon = rightWeapon;
+		this.leftWeapon = leftWeapon;
+		this.spellbook = spellbook;
+		this.armor = calculateBaseArmor();
+		this.life = calculateLife();
+		this.mana = calculateMana();
 	}
 	
 	private Armor calculateBaseArmor() {
-		return new Armor(0,ArmorPart.Skin);
+		return new Armor(0,ArmorPart.SKIN);
 	}
 	
 	private int calculateLife() {
@@ -32,6 +46,11 @@ public class Character {
 	
 	private int calculateMana() {
 		return 1;
+	}
+	
+	public void calculateAttack(AttackAction attack) {
+		int damage = attack.getProcessedDamageValue() - armor.calculateDefense(attack);
+		this.life -= damage > 0 ? damage : 0; 
 	}
 	
 	public int getLife() {

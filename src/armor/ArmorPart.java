@@ -1,10 +1,10 @@
 package armor;
 
 public enum ArmorPart {
-	Head,
-	Chest,
-	Arms,
-	Legs,
-	OffHand,
-	Skin
+	HEAD,
+	CHEST,
+	ARMS,
+	LEGS,
+	OFF_HAND,
+	SKIN
 }	
