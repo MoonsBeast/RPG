@@ -1,9 +1,15 @@
 package characters;
 
+import java.util.HashMap;
+
 import armor.Armor;
 import armor.ArmorPart;
+import armor.SkinArmor;
 import combat.AttackAction;
+import combat.Melee;
+import combat.Spell;
 import spellbooks.Spellbook;
+import weapons.Shield;
 import weapons.Weapon;
 
 public class Character {
@@ -15,10 +21,15 @@ public class Character {
 	private Weapon rightWeapon,leftWeapon;
 	private Spellbook spellbook;
 	
+	private static HashMap<Race,Integer> baseArmorTable, baseLifeTable;
+	private static HashMap<RolClass,Integer> baseManaTable;
+	
 	public Character(int level, Race race, RolClass rolClass) {
 		this.level = level;
 		this.race = race;
 		this.rolClass = rolClass;
+		
+		populateTables();
 		this.armor = calculateBaseArmor();
 		this.life = calculateLife();
 		this.mana = calculateMana();
@@ -31,25 +42,147 @@ public class Character {
 		this.rightWeapon = rightWeapon;
 		this.leftWeapon = leftWeapon;
 		this.spellbook = spellbook;
+		
+		populateTables();
 		this.armor = calculateBaseArmor();
 		this.life = calculateLife();
 		this.mana = calculateMana();
 	}
 	
+	private void populateTables() {
+		
+		//Armor Table
+		if(Character.baseArmorTable == null) {
+			
+			Character.baseArmorTable = new HashMap<>();
+			
+			Character.baseArmorTable.put(Race.ORC, 5);
+			Character.baseArmorTable.put(Race.HUMAN, 4);
+			Character.baseArmorTable.put(Race.ELF, 4);
+			Character.baseArmorTable.put(Race.DWARF, 3);
+			Character.baseArmorTable.put(Race.HALFLING, 2);
+			Character.baseArmorTable.put(Race.DRAGONBORN, 4);
+			Character.baseArmorTable.put(Race.GNOME, 2);
+			Character.baseArmorTable.put(Race.DEMON, 7);
+			Character.baseArmorTable.put(Race.MINOTAUR, 6);
+			Character.baseArmorTable.put(Race.CENTAUR, 6);
+			Character.baseArmorTable.put(Race.GOBLIN, 2);
+			Character.baseArmorTable.put(Race.AVEN, 5);
+			Character.baseArmorTable.put(Race.LEONIN, 5);
+		}
+		
+		//Life Table
+		if(Character.baseLifeTable == null) {
+			
+			Character.baseLifeTable = new HashMap<>();
+			
+			Character.baseLifeTable.put(Race.ORC, 7);
+			Character.baseLifeTable.put(Race.HUMAN, 5);
+			Character.baseLifeTable.put(Race.ELF, 5);
+			Character.baseLifeTable.put(Race.DWARF, 4);
+			Character.baseLifeTable.put(Race.HALFLING, 3);
+			Character.baseLifeTable.put(Race.DRAGONBORN, 6);
+			Character.baseLifeTable.put(Race.GNOME, 3);
+			Character.baseLifeTable.put(Race.DEMON, 8);
+			Character.baseLifeTable.put(Race.MINOTAUR, 8);
+			Character.baseLifeTable.put(Race.CENTAUR, 8);
+			Character.baseLifeTable.put(Race.GOBLIN, 2);
+			Character.baseLifeTable.put(Race.AVEN, 4);
+			Character.baseLifeTable.put(Race.LEONIN, 5);
+		}
+		
+		//Life Table
+		if(Character.baseManaTable == null) {
+			
+			Character.baseManaTable = new HashMap<>();
+			
+			Character.baseManaTable.put(RolClass.ARTIFICER, 2);
+			Character.baseManaTable.put(RolClass.BARBARIAN, 1);
+			Character.baseManaTable.put(RolClass.BARD, 25);
+			Character.baseManaTable.put(RolClass.CLERIC, 20);
+			Character.baseManaTable.put(RolClass.DRUID, 25);
+			Character.baseManaTable.put(RolClass.FIGHTER, 1);
+			Character.baseManaTable.put(RolClass.MONK, 5);
+			Character.baseManaTable.put(RolClass.PALADIN, 10);
+			Character.baseManaTable.put(RolClass.RANGER, 1);
+			Character.baseManaTable.put(RolClass.ROGUE, 1);
+			Character.baseManaTable.put(RolClass.SORCERER, 30);
+			Character.baseManaTable.put(RolClass.WARLOCK, 30);
+			Character.baseManaTable.put(RolClass.WIZARD, 50);
+		}
+		
+	};
+	
 	private Armor calculateBaseArmor() {
-		return new Armor(0,ArmorPart.SKIN);
+		return new SkinArmor(baseArmorTable.get(this.race));
 	}
 	
 	private int calculateLife() {
-		return 1;
+		return baseLifeTable.get(this.race) * this.level;
 	}
 	
 	private int calculateMana() {
-		return 1;
+		return baseManaTable.get(this.rolClass) * this.level;
 	}
 	
-	public void calculateAttack(AttackAction attack) {
-		int damage = attack.getProcessedDamageValue() - armor.calculateDefense(attack);
+	public boolean checkIfPartIsEquiped(ArmorPart armorPart) {
+		
+		return this.armor.checkIfPartIsEquiped(armorPart);
+	}
+	
+	public boolean canDoAttackWithRightHand() {
+		
+		return this.rightWeapon != null;
+	}
+	
+	public boolean canDoAttackWithLeftHand() {
+		
+		return this.leftWeapon != null;
+	}
+	
+	public boolean canCast() {
+		
+		return this.spellbook != null;
+	}
+	
+	public boolean canDoMelee() {
+		
+		return canDoAttackWithRightHand() || canDoAttackWithLeftHand();
+	}
+	
+	public boolean isCaster() {
+		
+		return this.rolClass == RolClass.BARD || 
+				this.rolClass == RolClass.WIZARD || 
+				this.rolClass == RolClass.SORCERER || 
+				this.rolClass == RolClass.CLERIC || 
+				this.rolClass == RolClass.DRUID || 
+				this.rolClass == RolClass.WARLOCK;
+	}
+	
+	public boolean isMelee() {
+		
+		return this.rolClass == RolClass.BARBARIAN || 
+				this.rolClass == RolClass.ARTIFICER || 
+				this.rolClass == RolClass.FIGHTER || 
+				this.rolClass == RolClass.MONK || 
+				this.rolClass == RolClass.PALADIN || 
+				this.rolClass == RolClass.RANGER ||
+				this.rolClass == RolClass.ROGUE;
+	}
+	
+	public void calculateAttackRecieved(AttackAction attack) {
+		
+		int shieldBonus = 0;
+		if(this.rightWeapon instanceof Shield) {
+			shieldBonus += this.rightWeapon.getAttack().getDamageValue();
+		}
+		
+		if(this.leftWeapon instanceof Shield) {
+			shieldBonus += this.leftWeapon.getAttack().getDamageValue();
+		}
+		
+		int damage = shieldBonus + attack.getProcessedDamageValue() - armor.calculateDefense(attack);
 		this.life -= damage > 0 ? damage : 0; 
 	}
 	
@@ -67,6 +200,18 @@ public class Character {
 
 	public void setMana(int mana) {
 		this.mana = mana;
+	}
+	
+	public Melee attackWithRight(){
+		return this.rightWeapon.doAttack();
+	}
+	
+	public Melee attackWithLeft(){
+		return this.leftWeapon.doAttack();
+	}
+	
+	public Spell attackWithMagic(){
+		return this.spellbook.castRandomSpell();
 	}
 
 	public Spellbook getSpellbook() {

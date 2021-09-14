@@ -3,12 +3,12 @@ package armor;
 import combat.AttackAction;
 import combat.DamageType;
 
-public class IronArmor extends Armor{
+public class LeatherArmor extends Armor {
 	
 	private Armor decoratedArmor;
 	
-	public IronArmor(Armor decoratedArmor, ArmorPart armorPart) {
-		super(2, armorPart);
+	public LeatherArmor(Armor decoratedArmor, ArmorPart armorPart) {
+		super(1, armorPart);
 		this.decoratedArmor = decoratedArmor;
 	}
 	
@@ -39,4 +39,5 @@ public class IronArmor extends Armor{
 	public boolean checkIfPartIsEquiped(ArmorPart armorPart) { 
 		return this.getArmorPart() == armorPart ? true : decoratedArmor.checkIfPartIsEquiped(armorPart);
 	}
+	
 }

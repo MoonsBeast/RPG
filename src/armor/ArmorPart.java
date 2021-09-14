@@ -5,6 +5,5 @@ public enum ArmorPart {
 	CHEST,
 	ARMS,
 	LEGS,
-	OFF_HAND,
 	SKIN
 }	

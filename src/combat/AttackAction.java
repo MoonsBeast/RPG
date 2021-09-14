@@ -2,15 +2,14 @@ package combat;
 
 public class AttackAction {
 	private String name;
-	private boolean isSpell, isCritic;
+	private boolean isCritic;
 	private DamageType damageType;
 	private int damageValue;
 
-	public AttackAction(String name, DamageType damageType, int damageValue, boolean isSpell, boolean isCritic) {
+	public AttackAction(String name, DamageType damageType, int damageValue, boolean isCritic) {
 		this.name = name;
 		this.damageType = damageType;
 		this.damageValue = damageValue;
-		this.isSpell = isSpell;
 		this.isCritic = isCritic;
 	}
 	
@@ -18,7 +17,6 @@ public class AttackAction {
 		this.name = name;
 		this.damageType = damageType;
 		this.damageValue = damageValue;
-		this.isSpell = false;
 		this.isCritic = false;
 	}
 	
@@ -26,7 +24,6 @@ public class AttackAction {
 		this.name = attack.name;
 		this.damageType = attack.damageType;
 		this.damageValue = attack.damageValue;
-		this.isSpell = attack.isSpell;
 		this.isCritic = attack.isCritic;
 	}
 	
@@ -56,14 +53,6 @@ public class AttackAction {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public boolean isSpell() {
-		return isSpell;
-	}
-
-	public void setSpell(boolean isSpell) {
-		this.isSpell = isSpell;
 	}
 
 	public boolean isCritic() {

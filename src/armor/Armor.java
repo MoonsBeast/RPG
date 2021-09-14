@@ -32,4 +32,8 @@ public class Armor{
 	public int calculateDefense(AttackAction attack) { 
 		return this.defense;
 	}
+	
+	public boolean checkIfPartIsEquiped(ArmorPart armorPart) { 
+		return this.armorPart == armorPart;
+	}
 }
