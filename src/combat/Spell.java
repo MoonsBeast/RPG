@@ -18,12 +18,12 @@ public class Spell extends AttackAction {
 		super(attack);
 	}
 
-	public int getSpellLevel() {
+	public int getManaCost() {
 		return manaCost;
 	}
 
-	public void setSpellLevel(int spellLevel) {
-		this.manaCost = spellLevel;
+	public void setManaCost(int manaCost) {
+		this.manaCost = manaCost;
 	}
 
 }

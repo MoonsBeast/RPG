@@ -26,7 +26,7 @@ public class Weapon {
 		
 		Random Random = new Random();
 		Melee chosenAttack = this.attack;
-		chosenAttack.setCritic(Random.nextInt(100) >= criticChance);
+		chosenAttack.setCritic(Random.nextInt(100) <= criticChance);
 		 
 		return chosenAttack;
 	}

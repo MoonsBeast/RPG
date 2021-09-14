@@ -8,7 +8,7 @@ import combat.Spell;
 public class BookOfDarkness extends Spellbook {
 
 	public BookOfDarkness() {
-		super(new ArrayList<Spell>(), 35);
+		super(new ArrayList<Spell>(), 5);
 		
 		ArrayList<Spell> spells = new ArrayList<Spell>();
 		

@@ -6,23 +6,22 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import armor.ArkaniteArmor;
-import armor.ArmorPart;
-import armor.IronArmor;
-import armor.LeatherArmor;
+import armor.*;
+import spellbooks.*;
+import weapons.*;
 
 public class RandomCharacterFactory implements CharacterFactory {
 	
 	private static final List<Race> Races = Collections.unmodifiableList(Arrays.asList(Race.values()));
 	private static final List<RolClass> Classes = Collections.unmodifiableList(Arrays.asList(RolClass.values()));
 	private static final int RacesSize = Races.size(), ClassesSize = Classes.size();
-	private static final Random Random = new Random();
+	private static final Random random = new Random();
 	
 	@Override
 	public Character createCharacter(int level) {
 		
-		Race race = Races.get(Random.nextInt(RacesSize));
-		RolClass rolClass = Classes.get(Random.nextInt(ClassesSize));
+		Race race = Races.get(random.nextInt(RacesSize));
+		RolClass rolClass = Classes.get(random.nextInt(ClassesSize));
 		Character character = new Character(level,race,rolClass);
 		armorUp(character);
 		weaponUp(character);
@@ -42,7 +41,7 @@ public class RandomCharacterFactory implements CharacterFactory {
 			
 			while(!parts.isEmpty()) {
 				
-				int pos = Random.nextInt(parts.size());
+				int pos = random.nextInt(parts.size());
 				ArmorPart actual = parts.get(pos);
 				
 				if(character.checkIfPartIsEquiped(actual)) {
@@ -134,7 +133,7 @@ public class RandomCharacterFactory implements CharacterFactory {
 			
 			while(!parts.isEmpty()) {
 				
-				int pos = Random.nextInt(parts.size());
+				int pos = random.nextInt(parts.size());
 				ArmorPart actual = parts.get(pos);
 				
 				if(character.checkIfPartIsEquiped(actual)) {
@@ -179,7 +178,7 @@ public class RandomCharacterFactory implements CharacterFactory {
 			
 			while(!parts.isEmpty()) {
 				
-				int pos = Random.nextInt(parts.size());
+				int pos = random.nextInt(parts.size());
 				ArmorPart actual = parts.get(pos);
 				
 				if(character.checkIfPartIsEquiped(actual)) {
@@ -254,6 +253,81 @@ public class RandomCharacterFactory implements CharacterFactory {
 	}
 	
 	private void weaponUp(Character character) {
+
+		ArrayList<Spellbook> books = new ArrayList<>();
+		books.add(new BookOfLight());
+		books.add(new BookOfDarkness());
+		books.add(new BookOfLightning());
+		books.add(new BookOfMaths());
+		
+		if(character.getRolClass() == RolClass.ARTIFICER) {
+			
+			character.setRightWeapon(new Musket());
+			character.setLeftWeapon(random.nextInt(100) >= 75 ? new Shield() : null);
+			
+		}else if(character.getRolClass() == RolClass.BARBARIAN) {
+			
+			character.setRightWeapon(new Warhammer());
+			
+		}else if(character.getRolClass() == RolClass.BARD) {
+			
+			character.setRightWeapon(new ElectricGuitar());
+			character.setSpellbook(books.get(random.nextInt(books.size())));
+			
+		}else if(character.getRolClass() == RolClass.CLERIC) {
+			
+			character.setRightWeapon(new Sword());
+			character.setLeftWeapon(new Shield());
+			character.setSpellbook(new BookOfLight());
+			
+		}else if(character.getRolClass() == RolClass.DRUID) {
+
+			character.setSpellbook(books.get(random.nextInt(books.size())));
+			
+		}else if(character.getRolClass() == RolClass.FIGHTER) {
+			
+			character.setRightWeapon(new Sword());
+			character.setLeftWeapon(new Sword());
+			
+		}else if(character.getRolClass() == RolClass.MONK) {
+			
+			character.setRightWeapon(new Fist());
+			character.setLeftWeapon(new Fist());
+			
+		}else if(character.getRolClass() == RolClass.PALADIN) {
+			
+			character.setRightWeapon(random.nextBoolean() ? new Sword() : new Spear());
+			character.setLeftWeapon(new Shield());
+			character.setSpellbook(new BookOfLight());
+			
+		}else if(character.getRolClass() == RolClass.RANGER) {
+			
+			character.setRightWeapon(random.nextBoolean() ? new Sword() : new Spear());
+			character.setLeftWeapon(new Shield());
+			character.setSpellbook(new BookOfLight());
+			
+		}else if(character.getRolClass() == RolClass.ROGUE) {
+			
+			character.setRightWeapon(random.nextBoolean() ? new Rapier() : new Dagger());
+			character.setLeftWeapon(new Dagger());
+			
+		}else if(character.getRolClass() == RolClass.SORCERER) {
+
+			character.setRightWeapon(new Dagger());
+			character.setSpellbook(books.get(random.nextInt(books.size())));
+
+			
+		}else if(character.getRolClass() == RolClass.WARLOCK) {
+			
+			character.setRightWeapon(random.nextBoolean() ? new Rapier() : new Dagger());
+			character.setSpellbook(books.get(random.nextInt(books.size())));
+			
+		}else if(character.getRolClass() == RolClass.WIZARD) {
+			
+			character.setRightWeapon(new Dagger());
+			character.setSpellbook(books.get(random.nextInt(books.size())));
+			
+		}
 		
 	}
 

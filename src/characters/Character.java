@@ -5,16 +5,14 @@ import java.util.HashMap;
 import armor.Armor;
 import armor.ArmorPart;
 import armor.SkinArmor;
-import combat.AttackAction;
-import combat.Melee;
-import combat.Spell;
+import combat.*;
 import spellbooks.Spellbook;
 import weapons.Shield;
 import weapons.Weapon;
 
 public class Character {
 	
-	private int level, life, mana;
+	private int level, maxLife, actualLife, maxMana, actualMana;
 	private Race race;
 	private RolClass rolClass;
 	private Armor armor;
@@ -31,8 +29,11 @@ public class Character {
 		
 		populateTables();
 		this.armor = calculateBaseArmor();
-		this.life = calculateLife();
-		this.mana = calculateMana();
+		this.maxLife = calculateLife();
+		this.maxMana = calculateMana();
+		
+		this.actualLife = maxLife;
+		this.actualMana = maxMana;
 	}
 	
 	public Character(int level, Race race, RolClass rolClass, Weapon rightWeapon, Weapon leftWeapon, Spellbook spellbook) {
@@ -45,8 +46,8 @@ public class Character {
 		
 		populateTables();
 		this.armor = calculateBaseArmor();
-		this.life = calculateLife();
-		this.mana = calculateMana();
+		this.maxLife = calculateLife();
+		this.maxMana = calculateMana();
 	}
 	
 	private void populateTables() {
@@ -98,16 +99,16 @@ public class Character {
 			
 			Character.baseManaTable.put(RolClass.ARTIFICER, 2);
 			Character.baseManaTable.put(RolClass.BARBARIAN, 1);
-			Character.baseManaTable.put(RolClass.BARD, 25);
-			Character.baseManaTable.put(RolClass.CLERIC, 20);
-			Character.baseManaTable.put(RolClass.DRUID, 25);
+			Character.baseManaTable.put(RolClass.BARD, 35);
+			Character.baseManaTable.put(RolClass.CLERIC, 30);
+			Character.baseManaTable.put(RolClass.DRUID, 40);
 			Character.baseManaTable.put(RolClass.FIGHTER, 1);
 			Character.baseManaTable.put(RolClass.MONK, 5);
-			Character.baseManaTable.put(RolClass.PALADIN, 10);
+			Character.baseManaTable.put(RolClass.PALADIN, 30);
 			Character.baseManaTable.put(RolClass.RANGER, 1);
 			Character.baseManaTable.put(RolClass.ROGUE, 1);
-			Character.baseManaTable.put(RolClass.SORCERER, 30);
-			Character.baseManaTable.put(RolClass.WARLOCK, 30);
+			Character.baseManaTable.put(RolClass.SORCERER, 40);
+			Character.baseManaTable.put(RolClass.WARLOCK, 40);
 			Character.baseManaTable.put(RolClass.WIZARD, 50);
 		}
 		
@@ -150,12 +151,28 @@ public class Character {
 		return canDoAttackWithRightHand() || canDoAttackWithLeftHand();
 	}
 	
+	public Melee attackWithRight(){
+		return this.rightWeapon.doAttack();
+	}
+	
+	public Melee attackWithLeft(){
+		return this.leftWeapon.doAttack();
+	}
+	
+	public Spell attackWithMagic(){
+		
+		Spell result = this.spellbook.castRandomSpell(this.actualMana);
+		this.actualMana -= result.getManaCost();
+		return result;
+	}
+	
 	public boolean isCaster() {
 		
 		return this.rolClass == RolClass.BARD || 
 				this.rolClass == RolClass.WIZARD || 
 				this.rolClass == RolClass.SORCERER || 
 				this.rolClass == RolClass.CLERIC || 
+				this.rolClass == RolClass.PALADIN ||
 				this.rolClass == RolClass.DRUID || 
 				this.rolClass == RolClass.WARLOCK;
 	}
@@ -166,6 +183,7 @@ public class Character {
 				this.rolClass == RolClass.ARTIFICER || 
 				this.rolClass == RolClass.FIGHTER || 
 				this.rolClass == RolClass.MONK || 
+				this.rolClass == RolClass.CLERIC || 
 				this.rolClass == RolClass.PALADIN || 
 				this.rolClass == RolClass.RANGER ||
 				this.rolClass == RolClass.ROGUE;
@@ -183,35 +201,23 @@ public class Character {
 		}
 		
 		int damage = shieldBonus + attack.getProcessedDamageValue() - armor.calculateDefense(attack);
-		this.life -= damage > 0 ? damage : 0; 
+		this.actualLife -= damage > 0 ? damage : 0; 
 	}
 	
-	public int getLife() {
-		return life;
+	public int getMaxLife() {
+		return maxLife;
 	}
 
-	public void setLife(int life) {
-		this.life = life;
+	public void setMaxLife(int life) {
+		this.maxLife = life;
 	}
 
-	public int getMana() {
-		return mana;
+	public int getMaxMana() {
+		return maxMana;
 	}
 
-	public void setMana(int mana) {
-		this.mana = mana;
-	}
-	
-	public Melee attackWithRight(){
-		return this.rightWeapon.doAttack();
-	}
-	
-	public Melee attackWithLeft(){
-		return this.leftWeapon.doAttack();
-	}
-	
-	public Spell attackWithMagic(){
-		return this.spellbook.castRandomSpell();
+	public void setMaxMana(int mana) {
+		this.maxMana = mana;
 	}
 
 	public Spellbook getSpellbook() {
@@ -227,6 +233,11 @@ public class Character {
 	}
 
 	public void setRightWeapon(Weapon rightWeapon) {
+		
+		if(rightWeapon != null && rightWeapon.getNumOfHadsRequired() == 2) {
+			this.setLeftWeapon(null);
+		}
+		
 		this.rightWeapon = rightWeapon;
 	}
 
@@ -235,6 +246,11 @@ public class Character {
 	}
 
 	public void setLeftWeapon(Weapon leftWeapon) {
+		
+		if(leftWeapon != null && leftWeapon.getNumOfHadsRequired() == 2) {
+			this.setRightWeapon(null);
+		}
+		
 		this.leftWeapon = leftWeapon;
 	}
 
@@ -268,6 +284,22 @@ public class Character {
 
 	public void setArmor(Armor armor) {
 		this.armor = armor;
+	}
+
+	public int getActualLife() {
+		return actualLife;
+	}
+
+	public void setActualLife(int actualLife) {
+		this.actualLife = actualLife;
+	}
+
+	public int getActualMana() {
+		return actualMana;
+	}
+
+	public void setActualMana(int actualMana) {
+		this.actualMana = actualMana;
 	}
 	
 }

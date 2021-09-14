@@ -17,6 +17,74 @@ public class Spellbook {
 
 	}
 	
+	private ArrayList<Spell> copySpellsOnNewArray(ArrayList<Spell> spells){
+		
+		ArrayList<Spell> result = new ArrayList<Spell>();
+		
+		for(Spell spell : spells) {
+			
+			try {
+				result.add((Spell) spell.clone());
+			} catch (CloneNotSupportedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
+	
+	public void addSpell(Spell attack) {
+
+		this.spells.add(attack);
+
+	}
+	
+	public Spell castSpell(String name,int manaAvailable) {
+		
+		Random Random = new Random();
+		ArrayList<Spell> availableSpells = copySpellsOnNewArray(this.spells);
+		for(Spell spell : availableSpells) {
+			
+			if(spell.getName().equalsIgnoreCase(name)) {
+				
+				if(!(spell.getManaCost() <= manaAvailable)) break;
+				
+				spell.setCritic(Random.nextInt(100) <= criticChance);
+				return spell;
+			}
+			
+		}
+		
+		return new Spell("Move Hands like an Idiot", DamageType.PSYCHIC, 0, 0);
+	}
+	
+	public Spell castRandomSpell(int manaAvailable) {
+			
+		 Random Random = new Random();
+		 boolean canBeCasted = false;
+		 ArrayList<Spell> availableSpells = copySpellsOnNewArray(this.spells);
+		 Spell chosenSpell = null;
+		 
+		 while(!canBeCasted) {
+			 
+			 int randPos = Random.nextInt(availableSpells.size());
+			 chosenSpell = availableSpells.get(randPos);
+			 
+			 canBeCasted = chosenSpell.getManaCost() <= manaAvailable;
+			 
+			 if(!canBeCasted) availableSpells.remove(randPos);
+			 
+			 if(availableSpells.size() == 0) {
+				 chosenSpell = new Spell("Move Hands like an Idiot", DamageType.PSYCHIC, 0, 0);
+			 }
+		 }
+		 
+		 chosenSpell.setCritic(Random.nextInt(100) <= criticChance);
+		 
+		 return chosenSpell;
+	}
+	
 	public ArrayList<Spell> getSpells() {
 		return spells;
 	}
@@ -26,35 +94,4 @@ public class Spellbook {
 		this.spells = spells;
 	}
 	
-	public void addSpell(Spell attack) {
-
-		this.spells.add(attack);
-
-	}
-	
-	public Spell castSpell(String name) {
-		
-		Random Random = new Random();
-		for(Spell spell : spells) {
-			
-			if(spell.getName().equalsIgnoreCase(name)) {
-				
-				Spell chosenSpell = spell;
-				chosenSpell.setCritic(Random.nextInt(100) >= criticChance);
-				return chosenSpell;
-			}
-			
-		}
-		
-		return new Spell("Move Hands like an Idiot", DamageType.PSYCHIC, 0, 0);
-	}
-	
-	public Spell castRandomSpell() {
-			
-		 Random Random = new Random();
-		 Spell chosenSpell = this.spells.get(Random.nextInt(this.spells.size()));
-		 chosenSpell.setCritic(Random.nextInt(100) >= criticChance);
-		 
-		 return chosenSpell;
-	}
 }

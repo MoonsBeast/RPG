@@ -1,6 +1,6 @@
 package combat;
 
-public class AttackAction {
+public class AttackAction implements Cloneable{
 	private String name;
 	private boolean isCritic;
 	private DamageType damageType;
@@ -27,16 +27,20 @@ public class AttackAction {
 		this.isCritic = attack.isCritic;
 	}
 	
+	public int getProcessedDamageValue() {
+		return isCritic ? damageValue*2 : damageValue;
+	}
+	
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
+	
 	public DamageType getDamageType() {
 		return damageType;
 	}
 	
 	public void setDamageType(DamageType damageType) {
 		this.damageType = damageType;
-	}
-	
-	public int getProcessedDamageValue() {
-		return isCritic ? damageValue*2 : damageValue;
 	}
 	
 	public int getDamageValue() {
