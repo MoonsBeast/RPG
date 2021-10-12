@@ -5,10 +5,9 @@ import combat.Melee;
 import combat.Spell;
 import characters.Character;
 
-public class MainGameLogic {
-
-	public static void main(String[] args) {
-		
+public class Main {
+	
+	public void testCharacters() {
 		RandomCharacterFactory factory = new RandomCharacterFactory();
 		
 		Character godofredo = factory.createCharacter(1);
@@ -49,6 +48,12 @@ public class MainGameLogic {
 		}
 		
 		System.out.println(res);
+	}
+	
+	public static void main(String[] args) {
+		
+		GameManager manager = new GameManager(600,500);
+		manager.start();
 	}
 
 }
