@@ -35,6 +35,7 @@ public class GUIManager {
 		
 		this.window = new JFrame(windowNames[random.nextInt(windowNames.length)]);      
 		this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.window.setResizable(false);
 		this.window.setSize(size);
 		this.window.setLocationRelativeTo(null);
 		

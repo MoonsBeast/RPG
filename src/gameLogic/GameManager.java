@@ -51,8 +51,8 @@ public class GameManager implements Runnable{
 		for(int i = 0; i < 4; i++) {
 			pepes.add(new Character(1, Race.HUMAN, RolClass.ROGUE));
 		}
-		allies = new CharacterSide(0, 0, panelWidth/2, panelHeight, pepes);
-		enemies = new CharacterSide(panelWidth/2, 0, panelWidth/2, panelHeight, pepes);
+		allies = new CharacterSide(0, 0, panelWidth/2, panelHeight, pepes, false);
+		enemies = new CharacterSide(panelWidth/2, 0, panelWidth/2, panelHeight, pepes, true);
 		
 		
 	}

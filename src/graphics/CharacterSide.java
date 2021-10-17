@@ -8,7 +8,7 @@ public class CharacterSide extends VisualComponent implements Drawable{
 	
 	ArrayList<CharacterSpace> actors = new ArrayList<CharacterSpace>();
 	
-	public CharacterSide(int xPos,int yPos,int width,int height, ArrayList<Character> characters) {
+	public CharacterSide(int xPos,int yPos,int width,int height, ArrayList<Character> characters, boolean invertPos) {
 		super(xPos,yPos,width,height);
 		
 		int margin = 10;
@@ -22,10 +22,22 @@ public class CharacterSide extends VisualComponent implements Drawable{
 		
 		boolean switchRow = false;
 		int count = 0;
+		
 		for(Character charOnScene: characters) {
 			
-			int xPosFinal = xPos + margin + (isTopRowBigger ? 0 : spaceXForActors/4) + (switchRow ? spaceXForActors/2 : 0) + count * spaceXForActors;
-			int yPosFinal = yPos + margin + (switchRow ? spaceYForActors : 0);
+			int xPosFinal, yPosFinal;
+			
+			if(invertPos) {
+				
+				xPosFinal = xPos + margin + (isTopRowBigger ? 0 : spaceXForActors/4) + (!switchRow ? spaceXForActors/2 : 0) + count * spaceXForActors;
+				yPosFinal = yPos + margin + (switchRow ? spaceYForActors : 0);
+				
+			}else {
+				
+				xPosFinal = xPos + margin + (isTopRowBigger ? 0 : spaceXForActors/4) + (switchRow ? spaceXForActors/2 : 0) + count * spaceXForActors;
+				yPosFinal = yPos + margin + (switchRow ? spaceYForActors : 0);
+				
+			}
 			
 			this.actors.add(new CharacterSpace(xPosFinal,yPosFinal,spaceXForActors,spaceYForActors,charOnScene));
 			
