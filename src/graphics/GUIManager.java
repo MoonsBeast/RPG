@@ -7,7 +7,7 @@ import javax.swing.*;
 public class GUIManager {
 	
 	protected JFrame window;
-	protected Canvas canvas;
+	protected PanelManager pManager;
 	
 	private int defaultWidth = 500, defaultHeight = 500;
 	private String[] windowNames = {
@@ -39,22 +39,18 @@ public class GUIManager {
 		this.window.setSize(size);
 		this.window.setLocationRelativeTo(null);
 		
-		this.canvas = new Canvas();
-		this.canvas.setPreferredSize(this.window.getContentPane().getSize());
-		this.canvas.setMaximumSize(this.window.getContentPane().getSize());
-		this.canvas.setMinimumSize(this.window.getContentPane().getSize());
+		pManager = new PanelManager(window);
 		
-		this.window.add(canvas);
+		this.window.add(pManager);
 		this.window.setVisible(true);
 
 	}
 	
+	public Dimension getDimensions() {
+		return this.window.getContentPane().getSize();
+	}
+	
 	public Canvas getCanvas() {
-		return this.canvas;
+		return pManager.getCanvas();
 	}
-	
-	public void setCanvas(Canvas canvas) {
-		this.canvas = canvas;
-	}
-	
 }

@@ -42,7 +42,7 @@ public class GameManager implements Runnable{
 	private void init() {
 		
 		this.GManager = new GUIManager(windowWidth,windowHeight);
-		Dimension size = this.GManager.getCanvas().getSize();
+		Dimension size = this.GManager.getDimensions();
 		panelWidth = size.width;
 		panelHeight = size.height;
 		
