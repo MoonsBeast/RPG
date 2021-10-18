@@ -15,18 +15,18 @@ import graphics.ImageLoader;
 
 public class GameManager implements Runnable{
 	
-	private GUIManager GManager;
-	private Thread thread;
+	protected GUIManager GManager;
+	protected Thread thread;
 	
-	private BufferStrategy bStrat;
-	private Graphics graph;
+	protected BufferStrategy bStrat;
+	protected Graphics graph;
 	
 	//BufferedImage patata;
 	CharacterSide allies, enemies;
 	
-	private boolean run = false;
-	private int windowWidth = 500, windowHeight = 500;
-	private int panelWidth = 500, panelHeight = 500;
+	protected boolean run = false;
+	protected int windowWidth = 500, windowHeight = 500;
+	protected int panelWidth = 500, panelHeight = 500;
 	
 	public GameManager() {
 		
@@ -37,6 +37,7 @@ public class GameManager implements Runnable{
 		
 		this.windowWidth = width;
 		this.windowHeight = height;
+		init();
 	}
 	
 	private void init() {
