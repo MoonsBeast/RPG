@@ -23,20 +23,19 @@ import weapons.WeaponList;
 
 public class PanelManager extends JPanel implements ActionListener{
 	
-	protected JPanel screen1;
-	protected Canvas screen2;
+	protected StartMenu menuPanel;
+	protected Canvas gameCanvas;
 	
-	protected ArrayList<JComboBox<String>> comboOptions;
 	protected JTextArea topText, bottomText;
 	
 	public PanelManager(JFrame frame) {
 		super(new BorderLayout());
 
-		screen1 = new StartMenu(frame);
-		screen2 = new Canvas();
-		configureScreen(screen2, frame);
+		menuPanel = new StartMenu(frame);
+		gameCanvas = new Canvas();
+		configureScreen(gameCanvas, frame);
 
-		add(screen1);
+		add(menuPanel);
 	}
 	
 	private void configureScreen(Component screen, JFrame frame) {
@@ -46,7 +45,7 @@ public class PanelManager extends JPanel implements ActionListener{
 	}
 	
 	public Canvas getCanvas() {
-		return this.screen2;
+		return this.gameCanvas;
 	}
 	
 	@Override
