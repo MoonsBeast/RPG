@@ -5,33 +5,27 @@ import java.awt.Canvas;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
-import javax.swing.JComboBox;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.border.Border;
-
-import characters.Race;
-import characters.RolClass;
-import spellbooks.BookList;
-import weapons.WeaponList;
 
 public class PanelManager extends JPanel implements ActionListener{
 	
 	protected StartMenu menuPanel;
 	protected Canvas gameCanvas;
+	protected JButton acceptButton;
+	protected boolean isCanvasInPlace = false;
 	
 	protected JTextArea topText, bottomText;
 	
 	public PanelManager(JFrame frame) {
 		super(new BorderLayout());
-
-		menuPanel = new StartMenu(frame);
+		
+		acceptButton = new JButton("Comenzar aventura");
+		acceptButton.addActionListener(this);
+		menuPanel = new StartMenu(frame,acceptButton);
 		gameCanvas = new Canvas();
 		configureScreen(gameCanvas, frame);
 
@@ -48,10 +42,23 @@ public class PanelManager extends JPanel implements ActionListener{
 		return this.gameCanvas;
 	}
 	
+	public synchronized boolean isCanvasInPlace() {
+		return this.isCanvasInPlace;
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
+		if(e.getSource() == acceptButton) {
+			
+			remove(menuPanel);
+			add(gameCanvas);
+			isCanvasInPlace = true;
+
+		}
 		
+		repaint();
+		revalidate();
 	}
 
 }

@@ -53,4 +53,8 @@ public class GUIManager {
 	public Canvas getCanvas() {
 		return pManager.getCanvas();
 	}
+	
+	public synchronized boolean isCanvasInPlace() {
+		return pManager.isCanvasInPlace();
+	}
 }

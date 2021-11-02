@@ -184,7 +184,8 @@ public class Character {
 				this.rolClass == RolClass.FIGHTER || 
 				this.rolClass == RolClass.MONK || 
 				this.rolClass == RolClass.CLERIC || 
-				this.rolClass == RolClass.PALADIN || 
+				this.rolClass == RolClass.PALADIN ||
+				this.rolClass == RolClass.DRUID ||
 				this.rolClass == RolClass.RANGER ||
 				this.rolClass == RolClass.ROGUE;
 	}

@@ -37,7 +37,6 @@ public class GameManager implements Runnable{
 		
 		this.windowWidth = width;
 		this.windowHeight = height;
-		init();
 	}
 	
 	private void init() {
@@ -54,15 +53,18 @@ public class GameManager implements Runnable{
 		}
 		allies = new CharacterSide(0, 0, panelWidth/2, panelHeight, pepes, false);
 		enemies = new CharacterSide(panelWidth/2, 0, panelWidth/2, panelHeight, pepes, true);
-		
-		
+
 	}
 	
 	private void tick() {
 		
+		if(!GManager.isCanvasInPlace()) return;
+		
 	}
 
 	private void render() {
+		
+		if(!GManager.isCanvasInPlace()) return;
 		
 		bStrat = this.GManager.getCanvas().getBufferStrategy();
 		if(bStrat == null) {

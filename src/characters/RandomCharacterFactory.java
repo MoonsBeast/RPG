@@ -29,7 +29,7 @@ public class RandomCharacterFactory implements CharacterFactory {
 		return character;
 	}
 	
-	private void armorUp(Character character) {
+	public void armorUp(Character character) {
 		
 		ArrayList<ArmorPart> parts = new ArrayList<>();
 		
@@ -252,7 +252,7 @@ public class RandomCharacterFactory implements CharacterFactory {
 		
 	}
 	
-	private void weaponUp(Character character) {
+	public void weaponUp(Character character) {
 
 		ArrayList<Spellbook> books = new ArrayList<>();
 		books.add(new BookOfLight());
