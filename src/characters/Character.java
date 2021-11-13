@@ -12,17 +12,20 @@ import weapons.Weapon;
 
 public class Character {
 	
-	private int level, maxLife, actualLife, maxMana, actualMana;
-	private Race race;
-	private RolClass rolClass;
-	private Armor armor;
-	private Weapon rightWeapon,leftWeapon;
-	private Spellbook spellbook;
+	protected int level, maxLife, actualLife, maxMana, actualMana;
+	protected String name; 
+	protected boolean isAlive = true; 
+	protected Race race;
+	protected RolClass rolClass;
+	protected Armor armor;
+	protected Weapon rightWeapon,leftWeapon;
+	protected Spellbook spellbook;
 	
-	private static HashMap<Race,Integer> baseArmorTable, baseLifeTable;
-	private static HashMap<RolClass,Integer> baseManaTable;
+	protected static HashMap<Race,Integer> baseArmorTable, baseLifeTable;
+	protected static HashMap<RolClass,Integer> baseManaTable;
 	
-	public Character(int level, Race race, RolClass rolClass) {
+	public Character(String name, int level, Race race, RolClass rolClass) {
+		this.name = name;
 		this.level = level;
 		this.race = race;
 		this.rolClass = rolClass;
@@ -36,7 +39,8 @@ public class Character {
 		this.actualMana = maxMana;
 	}
 	
-	public Character(int level, Race race, RolClass rolClass, Weapon rightWeapon, Weapon leftWeapon, Spellbook spellbook) {
+	public Character(String name, int level, Race race, RolClass rolClass, Weapon rightWeapon, Weapon leftWeapon, Spellbook spellbook) {
+		this.name = name;
 		this.level = level;
 		this.race = race;
 		this.rolClass = rolClass;
@@ -203,6 +207,8 @@ public class Character {
 		
 		int damage = shieldBonus + attack.getProcessedDamageValue() - armor.calculateDefense(attack);
 		this.actualLife -= damage > 0 ? damage : 0; 
+		
+		if(actualLife <= 0) this.isAlive = false;
 	}
 	
 	public int getMaxLife() {
@@ -302,5 +308,22 @@ public class Character {
 	public void setActualMana(int actualMana) {
 		this.actualMana = actualMana;
 	}
+	
+	public boolean isAlive() {
+		return isAlive;
+	}
+
+	public void setAlive(boolean isAlive) {
+		this.isAlive = isAlive;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	
 }

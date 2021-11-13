@@ -3,13 +3,16 @@ package graphics;
 import characters.Character;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class CharacterSide extends VisualComponent implements Drawable{
 	
 	ArrayList<CharacterSpace> actors = new ArrayList<CharacterSpace>();
 	
-	public CharacterSide(int xPos,int yPos,int width,int height, ArrayList<Character> characters, boolean invertPos) {
+	public CharacterSide(int xPos,int yPos,int width,int height, ArrayList<Character> characters, boolean invertPos, SpriteSheet sSheet) {
 		super(xPos,yPos,width,height);
+		
+		Random random = new Random();
 		
 		int margin = 10;
 		int innerWidth = width - 2 * margin;
@@ -30,16 +33,16 @@ public class CharacterSide extends VisualComponent implements Drawable{
 			if(invertPos) {
 				
 				xPosFinal = xPos + margin + (isTopRowBigger ? 0 : spaceXForActors/4) + (!switchRow ? spaceXForActors/2 : 0) + count * spaceXForActors;
-				yPosFinal = yPos + margin + (switchRow ? spaceYForActors : 0);
 				
 			}else {
 				
 				xPosFinal = xPos + margin + (isTopRowBigger ? 0 : spaceXForActors/4) + (switchRow ? spaceXForActors/2 : 0) + count * spaceXForActors;
-				yPosFinal = yPos + margin + (switchRow ? spaceYForActors : 0);
-				
+
 			}
 			
-			this.actors.add(new CharacterSpace(xPosFinal,yPosFinal,spaceXForActors,spaceYForActors,charOnScene));
+			yPosFinal = yPos + margin + (switchRow ? spaceYForActors : 0);
+			
+			this.actors.add(new CharacterSpace(invertPos ? (xPosFinal + spaceXForActors): xPosFinal,yPosFinal,invertPos ? -spaceXForActors : spaceXForActors,spaceYForActors,charOnScene,sSheet, new SpriteStateMachine(SpriteState.DEAD, 700+random.nextInt(76))));
 			
 			count++;
 			
@@ -49,7 +52,11 @@ public class CharacterSide extends VisualComponent implements Drawable{
 			}
 		}
 	}
-
+	
+	public VisualComponent getCharacterSpaceDimensions() {
+		return (VisualComponent)actors.get(0);
+	}
+	
 	@Override
 	public void draw(Graphics brush) {
 		

@@ -13,11 +13,10 @@ import javax.swing.JTextArea;
 
 public class PanelManager extends JPanel implements ActionListener{
 	
+	protected boolean isCanvasInPlace = false;
 	protected StartMenu menuPanel;
 	protected Canvas gameCanvas;
 	protected JButton acceptButton;
-	protected boolean isCanvasInPlace = false;
-	
 	protected JTextArea topText, bottomText;
 	
 	public PanelManager(JFrame frame) {

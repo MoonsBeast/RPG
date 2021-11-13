@@ -12,17 +12,42 @@ import weapons.*;
 
 public class RandomCharacterFactory implements CharacterFactory {
 	
-	private static final List<Race> Races = Collections.unmodifiableList(Arrays.asList(Race.values()));
-	private static final List<RolClass> Classes = Collections.unmodifiableList(Arrays.asList(RolClass.values()));
-	private static final int RacesSize = Races.size(), ClassesSize = Classes.size();
-	private static final Random random = new Random();
+	protected static final List<Race> Races = Collections.unmodifiableList(Arrays.asList(Race.values()));
+	protected static final List<RolClass> Classes = Collections.unmodifiableList(Arrays.asList(RolClass.values()));
+	protected static final int RacesSize = Races.size(), ClassesSize = Classes.size();
+	protected static final Random random = new Random();
+	protected String[] names = {
+		"Eufrasio",
+		"Geriberto",
+		"Nazario",
+		"Gerbasio",
+		"Amancio",
+		"Humberto",
+		"Guideon",
+		"Percibal",
+		"Cayetano",
+		"Citripio",
+		"Raymundo",
+		"Rodrigo",
+		"Gwydion",
+		"Ermenegildo",
+		"Deolindo",
+		"Demetrio",
+		"Protasio",
+		"Marino",
+		"Cristiano",
+		"Eutelerio",
+		"Rodolfo",
+		"Natalio",
+		"Victorio",
+	};
 	
 	@Override
 	public Character createCharacter(int level) {
 		
 		Race race = Races.get(random.nextInt(RacesSize));
 		RolClass rolClass = Classes.get(random.nextInt(ClassesSize));
-		Character character = new Character(level,race,rolClass);
+		Character character = new Character(names[random.nextInt(names.length)],level,race,rolClass);
 		armorUp(character);
 		weaponUp(character);
 		

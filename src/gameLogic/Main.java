@@ -52,7 +52,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		GameManager manager = new GameManager(600,500);
+		GameManager manager = new GameManager(800,700);
 		manager.start();
 	}
 

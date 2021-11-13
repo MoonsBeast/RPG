@@ -15,7 +15,10 @@ public class GUIManager {
 			"Desconfia del mayordomo",
 			"Pienso luego soy",
 			"¡¡¡MAMÁ, QUE NO SE PUEDE PAUSAR!!!",
-			"De primero de columpios"
+			"De primero de columpios",
+			"De pinta y colorea",
+			"De primero de gateo",
+			"Mas viejo que el poleo"
 			};
 	
 	public GUIManager() {
@@ -33,6 +36,7 @@ public class GUIManager {
 		Dimension size = new Dimension(defaultWidth,defaultHeight);
 		Random random = new Random();
 		
+		//Creates the frame and adds the PanelManager
 		this.window = new JFrame(windowNames[random.nextInt(windowNames.length)]);      
 		this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.window.setResizable(false);

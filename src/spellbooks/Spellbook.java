@@ -18,7 +18,7 @@ public class Spellbook {
 	}
 	
 	private ArrayList<Spell> copySpellsOnNewArray(ArrayList<Spell> spells){
-		
+		//Copy the spells ito anothe array making diferent instances
 		ArrayList<Spell> result = new ArrayList<Spell>();
 		
 		for(Spell spell : spells) {
@@ -66,6 +66,8 @@ public class Spellbook {
 		 ArrayList<Spell> availableSpells = copySpellsOnNewArray(this.spells);
 		 Spell chosenSpell = null;
 		 
+		 //Tries to cast, if it cant, removes that spell and tries another, if none are possible
+		 // does a generic spell that does nothing
 		 while(!canBeCasted) {
 			 
 			 int randPos = Random.nextInt(availableSpells.size());

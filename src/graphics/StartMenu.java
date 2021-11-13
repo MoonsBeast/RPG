@@ -31,15 +31,19 @@ public class StartMenu extends JPanel implements ActionListener{
 	public StartMenu(JFrame frame, JButton nextScreenButton) {
 		super(new GridLayout(4,0));
 		
+		//config the external button
 		acceptButton = nextScreenButton;
 		acceptButton.setEnabled(false);
 		
+		//get the real dimensions to work with
 		Dimension size = frame.getContentPane().getSize();
 		
 		this.setPreferredSize(size);
 		this.setMaximumSize(size);
 		this.setMinimumSize(size);
 		
+		//dinamically load the comobo boxes and check what kind of combat
+		//each class have
 		casters = new ArrayList<>();
 		melee = new ArrayList<>();
 		hybrids = new ArrayList<>();
@@ -55,9 +59,10 @@ public class StartMenu extends JPanel implements ActionListener{
 		JComboBox<String> bookCombo = new JComboBox<String>();
 		
 		races.forEach((race) -> raceCombo.addItem(race.toString()));
-		classes.forEach((rol) -> {
+		classes.forEach((rol) -> { // Add classes and check combat type
 			rolCombo.addItem(rol.toString());
-			Character dummy = new Character(1, Race.AVEN, rol);
+			
+			Character dummy = new Character("",1, Race.AVEN, rol);
 			if(dummy.isCaster() && dummy.isMelee()) {
 				hybrids.add(rol.toString());
 			}else if(dummy.isCaster()) {
@@ -69,17 +74,20 @@ public class StartMenu extends JPanel implements ActionListener{
 		weapons.forEach((race) -> weaponCombo.addItem(race.toString()));
 		books.forEach((book) -> bookCombo.addItem(book.toString()));
 		
+		//Add listeners for functionality
 		raceCombo.addActionListener(this);
 		rolCombo.addActionListener(this);
 		weaponCombo.addActionListener(this);
 		bookCombo.addActionListener(this);
 		
+		//adding options to the comboboxes
 		comboOptions = new ArrayList<JComboBox<String>>();
 		comboOptions.add(raceCombo);
 		comboOptions.add(rolCombo);
 		comboOptions.add(weaponCombo);
 		comboOptions.add(bookCombo);
-
+		
+		//text components and final configs
 		topText = new Label("Escoge una raza:");
 		
 		bottomText = new Label("Eres:");
@@ -88,6 +96,7 @@ public class StartMenu extends JPanel implements ActionListener{
 		weaponCombo.setEnabled(false);
 		bookCombo.setEnabled(false);
 		
+		//adding everything to the frame
 		add(topText);
 		add(new Label(" "));
 		add(raceCombo);
@@ -100,6 +109,7 @@ public class StartMenu extends JPanel implements ActionListener{
 	
 	protected void changeDescription() {
 		
+		//Compose the string descrption of the character
 		String result = "Eres: ";
 		
 		result += "Un/a " + (String)comboOptions.get(0).getSelectedItem();
@@ -108,11 +118,15 @@ public class StartMenu extends JPanel implements ActionListener{
 			result += ", tu clase es " + (String)comboOptions.get(1).getSelectedItem();
 		}
 		
-		if(comboOptions.get(2).isEnabled() && comboOptions.get(3).isEnabled()) {
+		if(comboOptions.get(2).isEnabled() && comboOptions.get(3).isEnabled()) { // Case it has a weapon and a book
+			
 			result += " y portas un/a " + (String)comboOptions.get(2).getSelectedItem() + " y " + (String)comboOptions.get(3).getSelectedItem();
-		}else if(comboOptions.get(2).isEnabled() || comboOptions.get(3).isEnabled()){
+			
+		}else if(comboOptions.get(2).isEnabled() || comboOptions.get(3).isEnabled()){ // Case it only has 1 weapon
+			
 			String weapon = (String)(comboOptions.get(2).isEnabled() ? comboOptions.get(2).getSelectedItem() : comboOptions.get(3).isEnabled() ?  "libro de " + (String)comboOptions.get(3).getSelectedItem() : "");
 			result += " y portas un/a " + weapon;
+			
 		}
 		
 		bottomText.setText(result);
@@ -136,6 +150,7 @@ public class StartMenu extends JPanel implements ActionListener{
 			String option = (String)comboOptions.get(1).getSelectedItem();	
 			boolean enableWeapon = false, enableBook = false;
 			
+			//Calculates what weapons can be used and enables that combos
 			if(hybrids.contains(option)) {
 				
 				enableWeapon = true;
@@ -151,6 +166,7 @@ public class StartMenu extends JPanel implements ActionListener{
 				
 			}
 			
+			//Enables what has to be enabled
 			comboOptions.get(2).setEnabled(enableWeapon);
 			comboOptions.get(3).setEnabled(enableBook);
 			acceptButton.setEnabled(true);

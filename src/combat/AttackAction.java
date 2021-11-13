@@ -31,6 +31,7 @@ public class AttackAction implements Cloneable{
 		return isCritic ? damageValue*2 : damageValue;
 	}
 	
+	//Clone is needed for sending attacks and not make the reference change
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	}

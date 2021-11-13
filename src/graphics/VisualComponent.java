@@ -2,7 +2,8 @@ package graphics;
 
 public class VisualComponent {
 	protected int xPos = 0, yPos = 0, width = 0, height = 0;
-	
+	protected boolean isVisible = true;
+
 	public VisualComponent() {}
 	
 	public VisualComponent(int xPos,int yPos,int width,int height) {
@@ -44,5 +45,11 @@ public class VisualComponent {
 		this.height = height;
 	}
 	
-	
+	public boolean isVisible() {
+		return isVisible;
+	}
+
+	public void setVisible(boolean isVisible) {
+		this.isVisible = isVisible;
+	}
 }
