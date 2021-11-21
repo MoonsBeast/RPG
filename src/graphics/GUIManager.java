@@ -4,6 +4,8 @@ import java.awt.*;
 import java.util.Random;
 import javax.swing.*;
 
+import characters.Character;
+
 public class GUIManager {
 	
 	protected JFrame window;
@@ -60,5 +62,9 @@ public class GUIManager {
 	
 	public synchronized boolean isCanvasInPlace() {
 		return pManager.isCanvasInPlace();
+	}
+	
+	public synchronized Character getCharacterFromImputs() {
+		return this.pManager.getCharacterFromImputs();
 	}
 }

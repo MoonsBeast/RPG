@@ -3,7 +3,7 @@ package graphics;
 public class SpriteStateMachine {
 	
 	protected SpriteState actualState;
-	protected int innerClock = 0, maxCount, module, timePerSprite, actualStateCount, spriteLimit;
+	protected int innerClock = 0, maxCount, timePerSprite, actualStateCount, spriteLimit;
 	
 	public SpriteStateMachine(SpriteState initialState, int timePerSprite) {
 		
@@ -11,8 +11,7 @@ public class SpriteStateMachine {
 		
 		this.actualState = initialState;
 		this.timePerSprite = timePerSprite;
-		this.module = timePerSprite;
-		this.maxCount = timePerSprite * module;
+		this.maxCount = timePerSprite * this.spriteLimit;
 		
 	}
 	
@@ -36,19 +35,21 @@ public class SpriteStateMachine {
 		this.spriteLimit = res;
 	}
 	
-	public void setStatus(SpriteState newState) {
+	public synchronized void setStatus(SpriteState newState) {
 		
 		calculateSpriteLimit(newState);
+		this.actualState = newState;
 		innerClock = 0;
+		actualStateCount = 0;
 	}
-	
-	public String tick() {
+
+	public synchronized String tick() {
 		
 		innerClock++;
 		
 		if(innerClock > maxCount) innerClock = 0;
 		
-		if(innerClock % module == 0) {
+		if(innerClock % timePerSprite == 0) {
 			actualStateCount++;
 			
 			if(actualStateCount == this.spriteLimit && actualState == SpriteState.DEAD) {

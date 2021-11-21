@@ -70,16 +70,17 @@ public class Spellbook {
 		 // does a generic spell that does nothing
 		 while(!canBeCasted) {
 			 
+			 if(availableSpells.size() == 0) {
+				 chosenSpell = new Spell("Move Hands like an Idiot", DamageType.PSYCHIC, 0, 0);
+				 break;
+			 }
+			 
 			 int randPos = Random.nextInt(availableSpells.size());
 			 chosenSpell = availableSpells.get(randPos);
 			 
 			 canBeCasted = chosenSpell.getManaCost() <= manaAvailable;
 			 
 			 if(!canBeCasted) availableSpells.remove(randPos);
-			 
-			 if(availableSpells.size() == 0) {
-				 chosenSpell = new Spell("Move Hands like an Idiot", DamageType.PSYCHIC, 0, 0);
-			 }
 		 }
 		 
 		 chosenSpell.setCritic(Random.nextInt(100) <= criticChance);

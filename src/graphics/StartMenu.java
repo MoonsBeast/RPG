@@ -14,8 +14,10 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 import characters.Character;
+import characters.FromInputCharacterFactory;
 import characters.Race;
 import characters.RolClass;
 import spellbooks.BookList;
@@ -25,7 +27,8 @@ public class StartMenu extends JPanel implements ActionListener{
 	
 	protected ArrayList<JComboBox<String>> comboOptions;
 	protected ArrayList<String> casters, melee, hybrids;
-	Label topText, bottomText;
+	protected Label topText;
+	protected JTextArea bottomText;
 	protected JButton acceptButton;
 	
 	public StartMenu(JFrame frame, JButton nextScreenButton) {
@@ -90,8 +93,9 @@ public class StartMenu extends JPanel implements ActionListener{
 		//text components and final configs
 		topText = new Label("Escoge una raza:");
 		
-		bottomText = new Label("Eres:");
+		bottomText = new JTextArea("Eres:");
 		
+		bottomText.setEditable(false);
 		rolCombo.setEnabled(false);
 		weaponCombo.setEnabled(false);
 		bookCombo.setEnabled(false);
@@ -105,6 +109,11 @@ public class StartMenu extends JPanel implements ActionListener{
 		add(bookCombo);
 		add(bottomText);
 		add(acceptButton);
+	}
+	
+	public Character getCharacterFromImputs() {
+		FromInputCharacterFactory factory = new FromInputCharacterFactory((String)comboOptions.get(0).getSelectedItem(), (String)comboOptions.get(1).getSelectedItem(), (String)comboOptions.get(2).getSelectedItem(), null, (String)comboOptions.get(3).getSelectedItem());
+		return factory.createCharacter(1);
 	}
 	
 	protected void changeDescription() {

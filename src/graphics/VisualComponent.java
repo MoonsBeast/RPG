@@ -13,43 +13,43 @@ public class VisualComponent {
 		this.height = height;
 	}
 
-	public int getxPos() {
+	public synchronized int getxPos() {
 		return xPos;
 	}
 
-	public void setxPos(int xPos) {
+	public synchronized void setxPos(int xPos) {
 		this.xPos = xPos;
 	}
 
-	public int getyPos() {
+	public synchronized int getyPos() {
 		return yPos;
 	}
 
-	public void setyPos(int yPos) {
+	public synchronized void setyPos(int yPos) {
 		this.yPos = yPos;
 	}
 
-	public int getWidth() {
+	public synchronized int getWidth() {
 		return width;
 	}
 
-	public void setWidth(int width) {
+	public synchronized void setWidth(int width) {
 		this.width = width;
 	}
 
-	public int getHeight() {
+	public synchronized int getHeight() {
 		return height;
 	}
 
-	public void setHeight(int height) {
+	public synchronized void setHeight(int height) {
 		this.height = height;
 	}
 	
-	public boolean isVisible() {
+	public synchronized boolean isVisible() {
 		return isVisible;
 	}
 
-	public void setVisible(boolean isVisible) {
+	public synchronized void setVisible(boolean isVisible) {
 		this.isVisible = isVisible;
 	}
 }

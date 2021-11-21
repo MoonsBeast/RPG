@@ -11,6 +11,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import characters.Character;
+import characters.FromInputCharacterFactory;
+
 public class PanelManager extends JPanel implements ActionListener{
 	
 	protected boolean isCanvasInPlace = false;
@@ -35,6 +38,10 @@ public class PanelManager extends JPanel implements ActionListener{
 		screen.setPreferredSize(frame.getContentPane().getSize());
 		screen.setMaximumSize(frame.getContentPane().getSize());
 		screen.setMinimumSize(frame.getContentPane().getSize());
+	}
+	
+	public synchronized Character getCharacterFromImputs() {
+		return this.menuPanel.getCharacterFromImputs();
 	}
 	
 	public Canvas getCanvas() {

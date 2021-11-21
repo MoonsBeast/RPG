@@ -32,7 +32,7 @@ public class CharacterSide extends VisualComponent implements Drawable{
 			
 			if(invertPos) {
 				
-				xPosFinal = xPos + margin + (isTopRowBigger ? 0 : spaceXForActors/4) + (!switchRow ? spaceXForActors/2 : 0) + count * spaceXForActors;
+				xPosFinal = xPos + margin + (isTopRowBigger ? 0 : spaceXForActors/characters.size()) + (!switchRow ? spaceXForActors/2 : 0) + count * spaceXForActors;
 				
 			}else {
 				
@@ -42,7 +42,8 @@ public class CharacterSide extends VisualComponent implements Drawable{
 			
 			yPosFinal = yPos + margin + (switchRow ? spaceYForActors : 0);
 			
-			this.actors.add(new CharacterSpace(invertPos ? (xPosFinal + spaceXForActors): xPosFinal,yPosFinal,invertPos ? -spaceXForActors : spaceXForActors,spaceYForActors,charOnScene,sSheet, new SpriteStateMachine(SpriteState.DEAD, 700+random.nextInt(76))));
+			charOnScene.setName(charOnScene.getName());
+			this.actors.add(new CharacterSpace(invertPos ? (xPosFinal + spaceXForActors): xPosFinal,yPosFinal,invertPos ? -spaceXForActors : spaceXForActors,spaceYForActors,charOnScene,sSheet, new SpriteStateMachine(SpriteState.IDLE, 700+random.nextInt(76))));
 			
 			count++;
 			
@@ -53,8 +54,62 @@ public class CharacterSide extends VisualComponent implements Drawable{
 		}
 	}
 	
-	public VisualComponent getCharacterSpaceDimensions() {
+	public synchronized VisualComponent getCharacterSpaceDimensions() {
 		return (VisualComponent)actors.get(0);
+	}
+	
+	public synchronized int getCharacterPosition(Character character) {
+		
+		int count = 0;
+		for(CharacterSpace testSubject : actors) {
+			
+			if(testSubject.getCharacter() == character) {
+				return count;
+			}
+			
+			count++;
+		}
+		return -1;
+	}
+	
+	public synchronized int getActorSize() {
+		return this.actors.size();
+	}
+	
+	public synchronized ArrayList<Character> getAliveActors() {
+		return new ArrayList<Character>(actors.stream().filter(actor -> actor.getCharacter().isAlive()).map(space -> space.getCharacter()).toList());
+	}
+	
+	public synchronized SpriteStateMachine getSSMachineOnIndex(int index) {
+		return this.actors.get(index).getSsm();
+	}
+	
+	public synchronized boolean isVisibleIndex(int index) {
+		return this.actors.get(index).isVisible();
+	}
+	
+	public synchronized void setVisibleOnIndex(boolean visible, int index) {
+		this.actors.get(index).setVisible(visible);
+	}
+	
+	public synchronized Character getCharacterOnIndex(int index) {
+		return this.actors.get(index).getCharacter();
+	}
+
+	public synchronized void setCharacterOnIndex(Character character,int index) {
+		this.actors.get(index).setCharacter(character);
+	}
+	
+	public synchronized void setStateOnIndex(SpriteState state,int index) {
+		this.actors.get(index).setState(state);
+	}
+	
+	public synchronized SpriteSheet getSpiteSheetOnIndex(int index) {
+		return actors.get(index).getSpiteSheet();
+	}
+
+	public synchronized void setSpiteSheetOnIndex(SpriteSheet spiteSheet, int index) {
+		this.actors.get(index).setSpiteSheet(spiteSheet);
 	}
 	
 	@Override

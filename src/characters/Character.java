@@ -44,14 +44,17 @@ public class Character {
 		this.level = level;
 		this.race = race;
 		this.rolClass = rolClass;
-		this.rightWeapon = rightWeapon;
-		this.leftWeapon = leftWeapon;
+		this.setRightWeapon(rightWeapon);
+		this.setLeftWeapon(leftWeapon);
 		this.spellbook = spellbook;
 		
 		populateTables();
 		this.armor = calculateBaseArmor();
 		this.maxLife = calculateLife();
 		this.maxMana = calculateMana();
+		
+		this.actualLife = maxLife;
+		this.actualMana = maxMana;
 	}
 	
 	private void populateTables() {

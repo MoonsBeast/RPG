@@ -1,61 +1,107 @@
 package characters;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
-import armor.*;
+import armor.ArkaniteArmor;
+import armor.ArmorPart;
+import armor.IronArmor;
+import armor.LeatherArmor;
 import spellbooks.*;
 import weapons.*;
 
-public class RandomCharacterFactory implements CharacterFactory {
+public class FromInputCharacterFactory implements CharacterFactory {
 	
-	protected static final List<Race> Races = Collections.unmodifiableList(Arrays.asList(Race.values()));
-	protected static final List<RolClass> Classes = Collections.unmodifiableList(Arrays.asList(RolClass.values()));
-	protected static final int RacesSize = Races.size(), ClassesSize = Classes.size();
-	protected static final Random random = new Random();
-	protected String[] names = {
-		"Eufrasio",
-		"Geriberto",
-		"Nazario",
-		"Gerbasio",
-		"Amancio",
-		"Humberto",
-		"Guideon",
-		"Percibal",
-		"Cayetano",
-		"Citripio",
-		"Raymundo",
-		"Rodrigo",
-		"Gwydion",
-		"Ermenegildo",
-		"Deolindo",
-		"Demetrio",
-		"Protasio",
-		"Marino",
-		"Cristiano",
-		"Eutelerio",
-		"Rodolfo",
-		"Natalio",
-		"Victorio",
-	};
+	protected String race, rolClas, weaponRight, weaponLeft, spellBook;	
+	public FromInputCharacterFactory(String race, String rolClas, String weaponRight, String weaponLeft, String spellBook) {
+		this.race = race;
+		this.rolClas = rolClas;
+		this.weaponRight = weaponRight;
+		this.weaponLeft = weaponLeft;
+		this.spellBook = spellBook;
+	}
+
+	protected Race stringToRace(String race) {
+		
+		for(Race testRace : Race.values()) {
+			
+			if(testRace.toString() == race) {
+				return testRace;
+			}
+			
+		}
+		
+		return null;
+	}
 	
-	@Override
-	public Character createCharacter(int level) {
+	protected RolClass stringToRolClass(String rolClass) {
 		
-		Race race = Races.get(random.nextInt(RacesSize));
-		RolClass rolClass = Classes.get(random.nextInt(ClassesSize));
-		Character character = new Character("Sir " + names[random.nextInt(names.length)],level,race,rolClass);
-		armorUp(character);
-		weaponUp(character);
+		for(RolClass testRol : RolClass.values()) {
+			
+			if(testRol.toString() == rolClass) {
+				return testRol;
+			}
+			
+		}
 		
-		return character;
+		return null;
+	}
+	
+	protected Weapon stringToWeapon(String weapon) {
+		
+		WeaponList weaponEnum = WeaponList.BOW;
+		for(WeaponList testWeapon : WeaponList.values()) {
+			
+			if(testWeapon.toString() == weapon) {
+				weaponEnum = testWeapon;
+				break;
+			}
+			
+		}
+		
+		Weapon res = null;
+		switch(weaponEnum){
+			case BOW: res = new Bow(); break;
+			case DAGGER: res = new Dagger(); break;
+			case ELECTRICGUITAR: res = new ElectricGuitar(); break;
+			case FIST: res = new Fist(); break;
+			case MUSKET: res = new Musket(); break;
+			case RAPIER: res = new Rapier(); break;
+			case SHIELD: res = new Shield(); break;
+			case SPEAR: res = new Spear(); break;
+			case SWORD: res = new Sword(); break;
+			case WARHAMMER: res = new Warhammer(); break;
+		}
+		
+		return res;
+	}
+	
+	protected Spellbook stringToBook(String book) {
+		
+		BookList bookEnum = BookList.MATHS;
+		for(BookList testWeapon : BookList.values()) {
+			
+			if(testWeapon.toString() == book) {
+				bookEnum = testWeapon;
+				break;
+			}
+			
+		}
+		
+		Spellbook res = null;
+		switch(bookEnum){
+			case DARKNESS: res = new BookOfDarkness(); break;
+			case LIGHT: res = new BookOfLight(); break;
+			case LIGHTNING: res = new BookOfLightning(); break;
+			case MATHS: res = new BookOfMaths(); break;
+		}
+		
+		return res;
 	}
 	
 	public static void armorUp(Character character) {
 		
+		Random random = new Random();
 		ArrayList<ArmorPart> parts = new ArrayList<>();
 		
 		if(character.getRolClass() == RolClass.ARTIFICER) {
@@ -277,83 +323,54 @@ public class RandomCharacterFactory implements CharacterFactory {
 		
 	}
 	
-	public void weaponUp(Character character) {
 
-		ArrayList<Spellbook> books = new ArrayList<>();
-		books.add(new BookOfLight());
-		books.add(new BookOfDarkness());
-		books.add(new BookOfLightning());
-		books.add(new BookOfMaths());
+	@Override
+	public Character createCharacter(int level) {
 		
-		if(character.getRolClass() == RolClass.ARTIFICER) {
-			
-			character.setRightWeapon(new Musket());
-			character.setLeftWeapon(random.nextInt(100) >= 75 ? new Shield() : null);
-			
-		}else if(character.getRolClass() == RolClass.BARBARIAN) {
-			
-			character.setRightWeapon(new Warhammer());
-			
-		}else if(character.getRolClass() == RolClass.BARD) {
-			
-			character.setRightWeapon(new ElectricGuitar());
-			character.setSpellbook(books.get(random.nextInt(books.size())));
-			
-		}else if(character.getRolClass() == RolClass.CLERIC) {
-			
-			character.setRightWeapon(new Sword());
-			character.setLeftWeapon(new Shield());
-			character.setSpellbook(new BookOfLight());
-			
-		}else if(character.getRolClass() == RolClass.DRUID) {
-
-			character.setSpellbook(books.get(random.nextInt(books.size())));
-			
-		}else if(character.getRolClass() == RolClass.FIGHTER) {
-			
-			character.setRightWeapon(new Sword());
-			character.setLeftWeapon(new Sword());
-			
-		}else if(character.getRolClass() == RolClass.MONK) {
-			
-			character.setRightWeapon(new Fist());
-			character.setLeftWeapon(new Fist());
-			
-		}else if(character.getRolClass() == RolClass.PALADIN) {
-			
-			character.setRightWeapon(random.nextBoolean() ? new Sword() : new Spear());
-			character.setLeftWeapon(new Shield());
-			character.setSpellbook(new BookOfLight());
-			
-		}else if(character.getRolClass() == RolClass.RANGER) {
-			
-			character.setRightWeapon(random.nextBoolean() ? new Sword() : new Spear());
-			character.setLeftWeapon(new Shield());
-			character.setSpellbook(new BookOfLight());
-			
-		}else if(character.getRolClass() == RolClass.ROGUE) {
-			
-			character.setRightWeapon(random.nextBoolean() ? new Rapier() : new Dagger());
-			character.setLeftWeapon(new Dagger());
-			
-		}else if(character.getRolClass() == RolClass.SORCERER) {
-
-			character.setRightWeapon(new Dagger());
-			character.setSpellbook(books.get(random.nextInt(books.size())));
-
-			
-		}else if(character.getRolClass() == RolClass.WARLOCK) {
-			
-			character.setRightWeapon(random.nextBoolean() ? new Rapier() : new Dagger());
-			character.setSpellbook(books.get(random.nextInt(books.size())));
-			
-		}else if(character.getRolClass() == RolClass.WIZARD) {
-			
-			character.setRightWeapon(new Dagger());
-			character.setSpellbook(books.get(random.nextInt(books.size())));
-			
-		}
-		
+		Character actor = new Character("Hero", level, stringToRace(this.race), stringToRolClass(this.rolClas), stringToWeapon(this.weaponRight), null /*stringToWeapon(this.weaponLeft)*/, stringToBook(this.spellBook));
+		armorUp(actor);
+		return actor;
 	}
 
+	public String getRace() {
+		return race;
+	}
+
+	public void setRace(String race) {
+		this.race = race;
+	}
+
+	public String getRolClas() {
+		return rolClas;
+	}
+
+	public void setRolClas(String rolClas) {
+		this.rolClas = rolClas;
+	}
+
+	public String getWeaponRight() {
+		return weaponRight;
+	}
+
+	public void setWeaponRight(String weaponRight) {
+		this.weaponRight = weaponRight;
+	}
+
+	public String getWeaponLeft() {
+		return weaponLeft;
+	}
+
+	public void setWeaponLeft(String weaponLeft) {
+		this.weaponLeft = weaponLeft;
+	}
+
+	public String getSpellBook() {
+		return spellBook;
+	}
+
+	public void setSpellBook(String spellBook) {
+		this.spellBook = spellBook;
+	}
+	
+	
 }
