@@ -6,13 +6,15 @@ import combat.AttackAction;
 import combat.Melee;
 
 public class Weapon {
-	private Melee attack;
-	private int criticChance; // between 0 and 99
-	private int numOfHadsRequired;
+	protected Melee attack;
+	protected int criticChance; // between 0 and 99
+	protected int numOfHadsRequired;
+	protected String name;
 	
-	public Weapon(Melee attack, int criticChance, int numOfHadsRequired) {
+	public Weapon(Melee attack, int criticChance, int numOfHadsRequired, WeaponList name) {
 		
 		this.attack = attack;
+		this.name = name.toString();
 		setCriticChance(criticChance);
 		setNumOfHadsRequired(numOfHadsRequired);
 		
@@ -53,5 +55,13 @@ public class Weapon {
 
 	public void setNumOfHadsRequired(int numOfHadsRequired) {
 		this.numOfHadsRequired = numOfHadsRequired > 2 ? 2 : (numOfHadsRequired < 1 ? 1 : numOfHadsRequired);
+	}
+
+	public String getName() {
+		return name.toString();
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

@@ -1,6 +1,6 @@
 package graphics;
 
-public class VisualComponent {
+public abstract class VisualComponent {
 	protected int xPos = 0, yPos = 0, width = 0, height = 0;
 	protected boolean isVisible = true;
 
@@ -13,19 +13,19 @@ public class VisualComponent {
 		this.height = height;
 	}
 
-	public synchronized int getxPos() {
+	public synchronized int getXPos() {
 		return xPos;
 	}
 
-	public synchronized void setxPos(int xPos) {
+	public synchronized void setXPos(int xPos) {
 		this.xPos = xPos;
 	}
 
-	public synchronized int getyPos() {
+	public synchronized int getYPos() {
 		return yPos;
 	}
 
-	public synchronized void setyPos(int yPos) {
+	public synchronized void setYPos(int yPos) {
 		this.yPos = yPos;
 	}
 
@@ -51,5 +51,18 @@ public class VisualComponent {
 
 	public synchronized void setVisible(boolean isVisible) {
 		this.isVisible = isVisible;
+	}
+	
+	public synchronized boolean containsPoint(int x, int y) {
+		int cx = this.width < 0 ? this.xPos+this.width : this.xPos;
+		int cy = this.height < 0 ? this.yPos+this.height : this.yPos;
+		
+		return (x > cx && x < cx + Math.abs(this.width)) && (y > cy && y < cy + Math.abs(height));
+	}
+	
+	public synchronized boolean isPointOnUpperHalf(int x, int y) {
+		int cy = this.height < 0 ? this.yPos+this.height : this.yPos;
+		
+		return containsPoint(x,y) && (y > cy && y < cy + Math.abs(height)/2);
 	}
 }

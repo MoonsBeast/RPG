@@ -6,12 +6,14 @@ import combat.DamageType;
 import combat.Spell;
 
 public class Spellbook {
-	private ArrayList<Spell> spells;
-	private int criticChance; // between 0 and 99
+	protected ArrayList<Spell> spells;
+	protected int criticChance; // between 0 and 99
+	protected String name;
 	
-	public Spellbook(ArrayList<Spell> spells, int criticChance) {
+	public Spellbook(ArrayList<Spell> spells, int criticChance, BookList name) {
 		
 		this.spells = new ArrayList<Spell>();
+		this.name = name.toString();
 		this.criticChance = criticChance > 99 ? 99 : (criticChance < 0 ? 0 : criticChance);
 		this.setSpells(spells);
 
@@ -96,5 +98,22 @@ public class Spellbook {
 		
 		this.spells = spells;
 	}
+
+	public synchronized int getCriticChance() {
+		return criticChance;
+	}
+
+	public synchronized void setCriticChance(int criticChance) {
+		this.criticChance = criticChance;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	
 }

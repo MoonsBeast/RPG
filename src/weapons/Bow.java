@@ -6,8 +6,8 @@ import combat.Melee;
 public class Bow extends Weapon {
 	
 	public Bow() {
-		super(null, 5, 2);
+		super(null, 5, 2, WeaponList.BOW);
 		
-		this.setAttack(new Melee("Sharpshot",DamageType.PIERCING, 5));
+		this.setAttack(new Melee("Sharpshot",DamageType.PIERCING, 7));
 	}
 }

@@ -24,6 +24,21 @@ public class Character {
 	protected static HashMap<Race,Integer> baseArmorTable, baseLifeTable;
 	protected static HashMap<RolClass,Integer> baseManaTable;
 	
+	public Character() {
+		this.name = "Nobody";
+		this.level = 1;
+		this.race = Race.AVEN;
+		this.rolClass = RolClass.ARTIFICER;
+		
+		populateTables();
+		this.armor = calculateBaseArmor();
+		this.maxLife = calculateLife();
+		this.maxMana = calculateMana();
+		
+		this.actualLife = maxLife;
+		this.actualMana = maxMana;
+	}
+	
 	public Character(String name, int level, Race race, RolClass rolClass) {
 		this.name = name;
 		this.level = level;
@@ -131,6 +146,28 @@ public class Character {
 	
 	private int calculateMana() {
 		return baseManaTable.get(this.rolClass) * this.level;
+	}
+	
+	public void levelUp() {
+		this.level++;
+		this.maxLife = calculateLife();
+		this.maxMana = calculateMana();
+		
+		this.actualLife = maxLife;
+		this.actualMana = maxMana;
+		
+		if(!this.isAlive) this.isAlive = true;
+	}
+	
+	public void levelDown() {
+		this.level--;
+		this.maxLife = calculateLife();
+		this.maxMana = calculateMana();
+		
+		this.actualLife = maxLife;
+		this.actualMana = maxMana;
+		
+		if(!this.isAlive) this.isAlive = true;
 	}
 	
 	public boolean checkIfPartIsEquiped(ArmorPart armorPart) {

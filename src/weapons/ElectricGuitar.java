@@ -6,7 +6,7 @@ import combat.Melee;
 public class ElectricGuitar extends Weapon {
 
 	public ElectricGuitar() {
-		super(null, 5, 2);
+		super(null, 5, 2, WeaponList.ELECTRICGUITAR);
 		
 		this.setAttack(new Melee("Play Maluma",DamageType.THUNDER, 5));
 	}

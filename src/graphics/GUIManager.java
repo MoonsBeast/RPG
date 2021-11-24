@@ -11,7 +11,7 @@ public class GUIManager {
 	protected JFrame window;
 	protected PanelManager pManager;
 	
-	private int defaultWidth = 500, defaultHeight = 500;
+	protected int defaultWidth = 500, defaultHeight = 500;
 	private String[] windowNames = {
 			"¡Supercalifragilisticoespialidoso!",
 			"Desconfia del mayordomo",
@@ -52,11 +52,11 @@ public class GUIManager {
 
 	}
 	
-	public Dimension getDimensions() {
+	public synchronized Dimension getDimensions() {
 		return this.window.getContentPane().getSize();
 	}
 	
-	public Canvas getCanvas() {
+	public synchronized Canvas getCanvas() {
 		return pManager.getCanvas();
 	}
 	
@@ -67,4 +67,21 @@ public class GUIManager {
 	public synchronized Character getCharacterFromImputs() {
 		return this.pManager.getCharacterFromImputs();
 	}
+
+	public synchronized int getMouseX() {
+		return pManager.getMouseX();
+	}
+
+	public synchronized void setMouseX(int mouseX) {
+		this.pManager.setMouseX(mouseX);
+	}
+
+	public synchronized int getMouseY() {
+		return pManager.getMouseY();
+	}
+
+	public synchronized void setMouseY(int mouseY) {
+		this.pManager.setMouseY(mouseY);
+	}
+	
 }

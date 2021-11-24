@@ -12,6 +12,11 @@ public class CharacterSide extends VisualComponent implements Drawable{
 	public CharacterSide(int xPos,int yPos,int width,int height, ArrayList<Character> characters, boolean invertPos, SpriteSheet sSheet) {
 		super(xPos,yPos,width,height);
 		
+		calculateActorPositionAndDimensions(characters,invertPos,sSheet);
+	}
+	
+	protected void calculateActorPositionAndDimensions(ArrayList<Character> characters, boolean invertPos, SpriteSheet sSheet) {
+		
 		Random random = new Random();
 		
 		int margin = 10;
@@ -52,6 +57,11 @@ public class CharacterSide extends VisualComponent implements Drawable{
 				count = 0;
 			}
 		}
+	}
+	
+	public void setNewActors(ArrayList<Character> characters, boolean invertPos, SpriteSheet sSheet) {
+		this.actors.clear();
+		calculateActorPositionAndDimensions(characters,invertPos,sSheet);
 	}
 	
 	public synchronized VisualComponent getCharacterSpaceDimensions() {
@@ -110,6 +120,25 @@ public class CharacterSide extends VisualComponent implements Drawable{
 
 	public synchronized void setSpiteSheetOnIndex(SpriteSheet spiteSheet, int index) {
 		this.actors.get(index).setSpiteSheet(spiteSheet);
+	}
+	
+	public synchronized void levelUpEveryone() {
+		this.actors.forEach((actor) -> {
+			actor.getCharacter().levelUp();
+			actor.setState(SpriteState.IDLE);
+		});
+	}
+	
+	public synchronized boolean checkIfAnyActorContainsPoint(int x, int y) {
+		return this.actors.stream().anyMatch(actor -> actor.containsPoint(x, y));   
+	}
+	
+	public synchronized Character getActorThatContainsPoint(int x, int y) {
+		return this.actors.stream().filter(actor -> actor.containsPoint(x, y)).map(space -> space.getCharacter()).findFirst().get();   
+	}
+	
+	public synchronized boolean isMouseOnUpperHalfOfActorPoint(int x, int y) {
+		return this.actors.stream().filter(actor -> actor.containsPoint(x, y)).findFirst().get().isPointOnUpperHalf(x, y);   
 	}
 	
 	@Override

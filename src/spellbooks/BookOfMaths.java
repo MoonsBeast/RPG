@@ -9,7 +9,7 @@ public class BookOfMaths extends Spellbook {
 
 	public BookOfMaths() {
 		
-		super(new ArrayList<Spell>(), 15);
+		super(new ArrayList<Spell>(), 15, BookList.MATHS);
 		
 		ArrayList<Spell> spells = new ArrayList<Spell>();
 		

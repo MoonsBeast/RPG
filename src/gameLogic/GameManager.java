@@ -2,18 +2,22 @@ package gameLogic;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-import characters.Race;
 import characters.RandomCharacterFactory;
 import characters.RolClass;
 import combat.AttackAction;
 import combat.DamageType;
 import characters.Character;
+import characters.Race;
 import graphics.CharacterSide;
 import graphics.CharacterSpace;
 import graphics.GUIManager;
@@ -22,6 +26,7 @@ import graphics.Narrator;
 import graphics.SpriteSheet;
 import graphics.SpriteState;
 import graphics.SpriteStateMachine;
+import graphics.Tooltip;
 import graphics.VisualComponent;
 
 public class GameManager implements Runnable{
@@ -37,6 +42,7 @@ public class GameManager implements Runnable{
 	protected Narrator narrator;
 	protected CharacterSpace spotlight;
 	protected CharacterSide allies, enemies;
+	protected Tooltip tooltip;
 	
 	protected ArrayList<Integer> turnBag;
 	
@@ -45,11 +51,6 @@ public class GameManager implements Runnable{
 	protected int timePassed = 0,characterPosibleActions = 0;
 	protected int windowWidth = 500, windowHeight = 500;
 	protected int panelWidth = 500, panelHeight = 500;
-	
-	public GameManager() {
-		
-		this.GManager = new GUIManager();
-	}
 	
 	public GameManager(int width, int height) {
 		
@@ -60,7 +61,8 @@ public class GameManager implements Runnable{
 	private void init() {
 		
 		//Initializes all necessary components
-		this.GManager = new GUIManager(windowWidth,windowHeight);
+		tooltip = new Tooltip();
+		GManager = new GUIManager(windowWidth,windowHeight);
 		Dimension size = this.GManager.getDimensions();
 		panelWidth = size.width;
 		panelHeight = size.height;
@@ -95,15 +97,9 @@ public class GameManager implements Runnable{
 		}
 		
 		//Character creation and their visual representation
-		RandomCharacterFactory factory = new RandomCharacterFactory();
-		ArrayList<Character> friends = new ArrayList<Character>(), 
-							 foes = new ArrayList<Character>();
-		for(int i = 0; i < 4; i++) {
-			friends.add(factory.createCharacter(1));
-			foes.add(factory.createCharacter(1));
-		}
-		allies = new CharacterSide(0, panelHeight/2, panelWidth/2, panelHeight/2, friends, false, alliesSheet);
-		enemies = new CharacterSide(panelWidth/2, panelHeight/2, panelWidth/2, panelHeight/2, foes, true, badGuysSheet);
+		
+		allies = new CharacterSide(0, panelHeight/2, panelWidth/2, panelHeight/2, generateRandomCharacter(4,1), false, alliesSheet);
+		enemies = new CharacterSide(panelWidth/2, panelHeight/2, panelWidth/2, panelHeight/2, generateRandomCharacter(4,1), true, badGuysSheet);
 		
 		allies.setSpiteSheetOnIndex(protagonistSheet, allies.getActorSize()-1);
 		
@@ -111,6 +107,17 @@ public class GameManager implements Runnable{
 		//-10 and -20 are because of the margins other components have, otherwise it would not fit properly
 		spotlight = new CharacterSpace(windowWidth/2-dimensions.getWidth()/2-10, windowHeight/2-dimensions.getHeight()-20, dimensions.getWidth(), dimensions.getHeight());
 
+	}
+	
+	private ArrayList<Character> generateRandomCharacter(int amount, int level){
+		RandomCharacterFactory factory = new RandomCharacterFactory();
+		ArrayList<Character> res = new ArrayList<Character>();
+		
+		for(int i = 0; i < amount; i++) {
+			res.add(factory.createCharacter(level));
+		}
+		
+		return res;
 	}
 	
 	private void tick() {//Calculus of the next game state
@@ -201,6 +208,7 @@ public class GameManager implements Runnable{
 			
 			if(posibleTargets.size() == 0) {
 				endTurn();
+				generateNextRound();
 				return;
 			}
 			
@@ -257,6 +265,24 @@ public class GameManager implements Runnable{
 
 	}
 	
+	private synchronized void generateNextRound() {
+		
+		narrator.setMainText("La ronda ha acabado. Ganan los " + (isFoeOnSpotlight ? "villanos" : "heroes") + ".");
+		
+		if(isFoeOnSpotlight) {
+			narrator.addAditionalText("Has aguantado " + narrator.getRound() + (narrator.getRound() == 1 ? "ronda" : "rondas") +". Más suerte la próxima vez.");
+		}else {
+			narrator.addAditionalText("¡¡Enhorabuena por la victoria!! Pero esto es solo una de muchas batallas a librar...");
+			narrator.addAditionalText("Sientes como tus fuerzas vuelven y crecen...");
+			narrator.addAditionalText("Tus enemigos preparan una resistencia aun mayor...");
+			narrator.nextRound();
+			allies.levelUpEveryone();
+			enemies.setNewActors(generateRandomCharacter(4, narrator.getRound()), true, badGuysSheet);
+		}
+		
+		
+	}
+	
 	private synchronized void endTurn() {
 		spotlight.setVisible(false);
 		spotlight.setCharacter(null);
@@ -269,6 +295,50 @@ public class GameManager implements Runnable{
 		targetSide.setVisibleOnIndex(true, turnBag.get(0) >= allies.getActorSize() ? turnBag.get(0) - allies.getActorSize() : turnBag.get(0));
 		turnBag.remove(0);
 	}
+	
+	private synchronized void checkAndDrawTooltip(Graphics brush) {
+		
+		boolean drawTooltip = false, drawDownwards = true;
+		Character infoCharacter = new Character();
+		int x = GManager.getMouseX(), y = GManager.getMouseY();
+		
+		if(allies.checkIfAnyActorContainsPoint(x, y)) {
+			
+			infoCharacter = allies.getActorThatContainsPoint(x, y);
+			drawDownwards = allies.isMouseOnUpperHalfOfActorPoint(x, y);
+			drawTooltip = true;
+			
+		}else if(enemies.checkIfAnyActorContainsPoint(x, y)) {
+			
+			infoCharacter = enemies.getActorThatContainsPoint(x, y);
+			drawDownwards = enemies.isMouseOnUpperHalfOfActorPoint(x, y);
+			drawTooltip = true;
+			
+		}
+		
+		if(drawTooltip) {
+			int height = brush.getFontMetrics().getHeight()*9+5;
+			tooltip.setXPos(x);
+			tooltip.setYPos(drawDownwards ? y : y-height);
+			tooltip.setWidth(220);
+			tooltip.setHeight(height);
+			
+			ArrayList<String> text = new ArrayList<>();
+			text.add("Nombre: " + infoCharacter.getName());
+			text.add("Nivel: " + infoCharacter.getLevel());
+			text.add("Raza: " + infoCharacter.getRace());
+			text.add("Clase: " + infoCharacter.getRolClass());
+			text.add("Vida: " + infoCharacter.getActualLife() + " / " + infoCharacter.getMaxLife());
+			text.add("Mana: " + infoCharacter.getActualMana() + " / " + infoCharacter.getMaxMana());
+			text.add("Arma Derecha: " + (infoCharacter.getRightWeapon() != null ? infoCharacter.getRightWeapon().getName() : "Ninguna"));
+			text.add("Arma Izquierda: " + (infoCharacter.getLeftWeapon() != null ? infoCharacter.getLeftWeapon().getName() : "Ninguna"));
+			text.add("Grimorio: " + (infoCharacter.getSpellbook() != null ? "Grimorio de " + infoCharacter.getSpellbook().getName() : "Ninguno"));
+			
+			tooltip.setTexts(text);
+			
+			tooltip.draw(brush);
+		}
+	}
 
 	private void render() {
 		
@@ -279,19 +349,20 @@ public class GameManager implements Runnable{
 			return;
 		}
 		graph = bStrat.getDrawGraphics();
-		
+
 		//Clear
 		graph.clearRect(0, 0, windowWidth, windowHeight);
 		
 		//Draw
-		
 		graph.drawImage(bg, 0, 0, windowWidth, windowHeight, null);
-		
+
 		narrator.draw(graph);
 		spotlight.draw(graph);
 		allies.draw(graph);
 		enemies.draw(graph);
-
+		
+		checkAndDrawTooltip(graph);
+		
 		//End Draw
 		
 		bStrat.show();
@@ -337,4 +408,5 @@ public class GameManager implements Runnable{
 			
 		}
 	}
+
 }
