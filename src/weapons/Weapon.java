@@ -5,7 +5,7 @@ import java.util.Random;
 import combat.AttackAction;
 import combat.Melee;
 
-public class Weapon {
+public abstract class Weapon {
 	protected Melee attack;
 	protected int criticChance; // between 0 and 99
 	protected int numOfHadsRequired;

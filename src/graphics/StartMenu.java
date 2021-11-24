@@ -58,7 +58,8 @@ public class StartMenu extends JPanel implements ActionListener{
 		
 		JComboBox<String> raceCombo = new JComboBox<String>();
 		JComboBox<String> rolCombo = new JComboBox<String>();
-		JComboBox<String> weaponCombo = new JComboBox<String>();
+		JComboBox<String> rightWeaponCombo = new JComboBox<String>();
+		JComboBox<String> leftWeaponCombo = new JComboBox<String>();
 		JComboBox<String> bookCombo = new JComboBox<String>();
 		
 		races.forEach((race) -> raceCombo.addItem(race.toString()));
@@ -74,20 +75,25 @@ public class StartMenu extends JPanel implements ActionListener{
 				melee.add(rol.toString());
 			}
 								});
-		weapons.forEach((race) -> weaponCombo.addItem(race.toString()));
+		weapons.forEach((race) -> {
+			rightWeaponCombo.addItem(race.toString());
+			leftWeaponCombo.addItem(race.toString());
+		});
 		books.forEach((book) -> bookCombo.addItem(book.toString()));
 		
 		//Add listeners for functionality
 		raceCombo.addActionListener(this);
 		rolCombo.addActionListener(this);
-		weaponCombo.addActionListener(this);
+		rightWeaponCombo.addActionListener(this);
+		leftWeaponCombo.addActionListener(this);
 		bookCombo.addActionListener(this);
 		
 		//adding options to the comboboxes
 		comboOptions = new ArrayList<JComboBox<String>>();
 		comboOptions.add(raceCombo);
 		comboOptions.add(rolCombo);
-		comboOptions.add(weaponCombo);
+		comboOptions.add(rightWeaponCombo);
+		comboOptions.add(leftWeaponCombo);
 		comboOptions.add(bookCombo);
 		
 		//text components and final configs
@@ -97,22 +103,23 @@ public class StartMenu extends JPanel implements ActionListener{
 		
 		bottomText.setEditable(false);
 		rolCombo.setEnabled(false);
-		weaponCombo.setEnabled(false);
+		rightWeaponCombo.setEnabled(false);
+		leftWeaponCombo.setEnabled(false);
 		bookCombo.setEnabled(false);
 		
 		//adding everything to the frame
 		add(topText);
-		add(new Label(" "));
 		add(raceCombo);
 		add(rolCombo);
-		add(weaponCombo);
+		add(rightWeaponCombo);
+		add(leftWeaponCombo);
 		add(bookCombo);
 		add(bottomText);
 		add(acceptButton);
 	}
 	
 	public Character getCharacterFromImputs() {
-		FromInputCharacterFactory factory = new FromInputCharacterFactory((String)comboOptions.get(0).getSelectedItem(), (String)comboOptions.get(1).getSelectedItem(), (String)comboOptions.get(2).getSelectedItem(), null, (String)comboOptions.get(3).getSelectedItem());
+		FromInputCharacterFactory factory = new FromInputCharacterFactory((String)comboOptions.get(0).getSelectedItem(), (String)comboOptions.get(1).getSelectedItem(), (comboOptions.get(2).isEnabled()? (String)comboOptions.get(2).getSelectedItem() : null) , (comboOptions.get(3).isEnabled()? (String)comboOptions.get(3).getSelectedItem() : null), (comboOptions.get(4).isEnabled() ? (String)comboOptions.get(4).getSelectedItem() : null));
 		return factory.createCharacter(1);
 	}
 	
@@ -127,14 +134,27 @@ public class StartMenu extends JPanel implements ActionListener{
 			result += ", tu clase es " + (String)comboOptions.get(1).getSelectedItem();
 		}
 		
-		if(comboOptions.get(2).isEnabled() && comboOptions.get(3).isEnabled()) { // Case it has a weapon and a book
+		boolean weaponsPretextIsPut = false;
+		for(int i = 2; i < 5; i++) {
 			
-			result += " y portas un/a " + (String)comboOptions.get(2).getSelectedItem() + " y " + (String)comboOptions.get(3).getSelectedItem();
+			//begin or continuation of the sentence
+			if(!weaponsPretextIsPut && comboOptions.get(i).isEnabled()) {
+				
+				result += "\n y portas un/a ";
+				weaponsPretextIsPut = true;
+				
+			}else if(comboOptions.get(i).isEnabled()){
+				
+				result += ", ";
+				
+			}
 			
-		}else if(comboOptions.get(2).isEnabled() || comboOptions.get(3).isEnabled()){ // Case it only has 1 weapon
-			
-			String weapon = (String)(comboOptions.get(2).isEnabled() ? comboOptions.get(2).getSelectedItem() : comboOptions.get(3).isEnabled() ?  "libro de " + (String)comboOptions.get(3).getSelectedItem() : "");
-			result += " y portas un/a " + weapon;
+			//item name
+			if(comboOptions.get(i).isEnabled()) {
+				
+				result += (String)comboOptions.get(i).getSelectedItem();
+				
+			}	
 			
 		}
 		
@@ -143,9 +163,7 @@ public class StartMenu extends JPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
-		changeDescription();
-		
+
 		if(e.getSource() == comboOptions.get(0)) {
 			
 			comboOptions.get(1).setEnabled(true);
@@ -177,12 +195,15 @@ public class StartMenu extends JPanel implements ActionListener{
 			
 			//Enables what has to be enabled
 			comboOptions.get(2).setEnabled(enableWeapon);
-			comboOptions.get(3).setEnabled(enableBook);
+			comboOptions.get(3).setEnabled(enableWeapon);
+			comboOptions.get(4).setEnabled(enableBook);
 			acceptButton.setEnabled(true);
 
 			topText.setText("Y por último, selecciona tus armas:");
 			
 		}
+		
+		changeDescription();
 	}
 
 }

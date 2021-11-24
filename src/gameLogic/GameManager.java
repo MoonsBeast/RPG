@@ -270,7 +270,7 @@ public class GameManager implements Runnable{
 		narrator.setMainText("La ronda ha acabado. Ganan los " + (isFoeOnSpotlight ? "villanos" : "heroes") + ".");
 		
 		if(isFoeOnSpotlight) {
-			narrator.addAditionalText("Has aguantado " + narrator.getRound() + (narrator.getRound() == 1 ? "ronda" : "rondas") +". Más suerte la próxima vez.");
+			narrator.addAditionalText("Has aguantado " + narrator.getRound() + (narrator.getRound() == 1 ? " ronda" : " rondas") +". Más suerte la próxima vez.");
 		}else {
 			narrator.addAditionalText("¡¡Enhorabuena por la victoria!! Pero esto es solo una de muchas batallas a librar...");
 			narrator.addAditionalText("Sientes como tus fuerzas vuelven y crecen...");
@@ -305,23 +305,18 @@ public class GameManager implements Runnable{
 		if(allies.checkIfAnyActorContainsPoint(x, y)) {
 			
 			infoCharacter = allies.getActorThatContainsPoint(x, y);
-			drawDownwards = allies.isMouseOnUpperHalfOfActorPoint(x, y);
+			drawDownwards = allies.isPointOnUpperHalf(x, y);
 			drawTooltip = true;
 			
 		}else if(enemies.checkIfAnyActorContainsPoint(x, y)) {
 			
 			infoCharacter = enemies.getActorThatContainsPoint(x, y);
-			drawDownwards = enemies.isMouseOnUpperHalfOfActorPoint(x, y);
+			drawDownwards = enemies.isPointOnUpperHalf(x, y);
 			drawTooltip = true;
 			
 		}
 		
 		if(drawTooltip) {
-			int height = brush.getFontMetrics().getHeight()*9+5;
-			tooltip.setXPos(x);
-			tooltip.setYPos(drawDownwards ? y : y-height);
-			tooltip.setWidth(220);
-			tooltip.setHeight(height);
 			
 			ArrayList<String> text = new ArrayList<>();
 			text.add("Nombre: " + infoCharacter.getName());
@@ -332,10 +327,19 @@ public class GameManager implements Runnable{
 			text.add("Mana: " + infoCharacter.getActualMana() + " / " + infoCharacter.getMaxMana());
 			text.add("Arma Derecha: " + (infoCharacter.getRightWeapon() != null ? infoCharacter.getRightWeapon().getName() : "Ninguna"));
 			text.add("Arma Izquierda: " + (infoCharacter.getLeftWeapon() != null ? infoCharacter.getLeftWeapon().getName() : "Ninguna"));
-			text.add("Grimorio: " + (infoCharacter.getSpellbook() != null ? "Grimorio de " + infoCharacter.getSpellbook().getName() : "Ninguno"));
+			text.add("Grimorio: " + (infoCharacter.getSpellbook() != null ? infoCharacter.getSpellbook().getName() : "Ninguno"));
 			
 			tooltip.setTexts(text);
 			
+			int height = brush.getFontMetrics().getHeight()*9+5;
+			tooltip.setXPos(x);
+			tooltip.setYPos(drawDownwards ? y : y-height);
+			
+			var counter = new Object(){ int count = 0; };
+			text.forEach(word -> {if(word.length() > counter.count) counter.count = word.length();});
+			tooltip.setWidth(8 * counter.count);
+			tooltip.setHeight(height);
+
 			tooltip.draw(brush);
 		}
 	}

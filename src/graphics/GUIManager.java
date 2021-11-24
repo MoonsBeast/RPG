@@ -20,7 +20,17 @@ public class GUIManager {
 			"De primero de columpios",
 			"De pinta y colorea",
 			"De primero de gateo",
-			"Mas viejo que el poleo"
+			"Mas viejo que el poleo",
+			"Patrocinado por Corea del medio",
+			"Un juego para todas las edades",
+			"Cola Cao >>> Nesquick",
+			"Desarrollado encima de un cementerio indio",
+			"Elije: Pastilla roja o pastilla azul",
+			"Para matar una rata muy gorda",
+			"Lee el archivo de las tormentas",
+			"Quevedo estuvo aquí",
+			"Juego no relacionado con IBM",
+			"Indra es el boss final"
 			};
 	
 	public GUIManager() {
@@ -39,7 +49,7 @@ public class GUIManager {
 		Random random = new Random();
 		
 		//Creates the frame and adds the PanelManager
-		this.window = new JFrame(windowNames[random.nextInt(windowNames.length)]);      
+		this.window = new JFrame("Combat Idle: " + windowNames[random.nextInt(windowNames.length)]);      
 		this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.window.setResizable(false);
 		this.window.setSize(size);

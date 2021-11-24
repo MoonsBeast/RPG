@@ -49,7 +49,7 @@ public class FromInputCharacterFactory implements CharacterFactory {
 	
 	protected Weapon stringToWeapon(String weapon) {
 		
-		WeaponList weaponEnum = WeaponList.BOW;
+		WeaponList weaponEnum = null;
 		for(WeaponList testWeapon : WeaponList.values()) {
 			
 			if(testWeapon.toString() == weapon) {
@@ -60,17 +60,40 @@ public class FromInputCharacterFactory implements CharacterFactory {
 		}
 		
 		Weapon res = null;
-		switch(weaponEnum){
-			case BOW: res = new Bow(); break;
-			case DAGGER: res = new Dagger(); break;
-			case ELECTRICGUITAR: res = new ElectricGuitar(); break;
-			case FIST: res = new Fist(); break;
-			case MUSKET: res = new Musket(); break;
-			case RAPIER: res = new Rapier(); break;
-			case SHIELD: res = new Shield(); break;
-			case SPEAR: res = new Spear(); break;
-			case SWORD: res = new Sword(); break;
-			case WARHAMMER: res = new Warhammer(); break;
+		if (weaponEnum != null) {
+			
+			switch (weaponEnum) {
+				case BOW:
+					res = new Bow();
+					break;
+				case DAGGER:
+					res = new Dagger();
+					break;
+				case ELECTRICGUITAR:
+					res = new ElectricGuitar();
+					break;
+				case FIST:
+					res = new Fist();
+					break;
+				case MUSKET:
+					res = new Musket();
+					break;
+				case RAPIER:
+					res = new Rapier();
+					break;
+				case SHIELD:
+					res = new Shield();
+					break;
+				case SPEAR:
+					res = new Spear();
+					break;
+				case SWORD:
+					res = new Sword();
+					break;
+				case WARHAMMER:
+					res = new Warhammer();
+					break;
+			}
 		}
 		
 		return res;
@@ -78,7 +101,7 @@ public class FromInputCharacterFactory implements CharacterFactory {
 	
 	protected Spellbook stringToBook(String book) {
 		
-		BookList bookEnum = BookList.MATHS;
+		BookList bookEnum = null;
 		for(BookList testWeapon : BookList.values()) {
 			
 			if(testWeapon.toString() == book) {
@@ -89,11 +112,22 @@ public class FromInputCharacterFactory implements CharacterFactory {
 		}
 		
 		Spellbook res = null;
-		switch(bookEnum){
-			case DARKNESS: res = new BookOfDarkness(); break;
-			case LIGHT: res = new BookOfLight(); break;
-			case LIGHTNING: res = new BookOfLightning(); break;
-			case MATHS: res = new BookOfMaths(); break;
+		if (bookEnum != null) {
+			
+			switch (bookEnum) {
+				case DARKNESS:
+					res = new BookOfDarkness();
+					break;
+				case LIGHT:
+					res = new BookOfLight();
+					break;
+				case LIGHTNING:
+					res = new BookOfLightning();
+					break;
+				case MATHS:
+					res = new BookOfMaths();
+					break;
+			}
 		}
 		
 		return res;
@@ -327,7 +361,7 @@ public class FromInputCharacterFactory implements CharacterFactory {
 	@Override
 	public Character createCharacter(int level) {
 		
-		Character actor = new Character("Hero", level, stringToRace(this.race), stringToRolClass(this.rolClas), stringToWeapon(this.weaponRight), null /*stringToWeapon(this.weaponLeft)*/, stringToBook(this.spellBook));
+		Character actor = new Character("Hero", level, stringToRace(this.race), stringToRolClass(this.rolClas), stringToWeapon(this.weaponRight), stringToWeapon(this.weaponLeft), stringToBook(this.spellBook));
 		armorUp(actor);
 		return actor;
 	}

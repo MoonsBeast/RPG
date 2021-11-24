@@ -5,7 +5,7 @@ import java.util.Random;
 import combat.DamageType;
 import combat.Spell;
 
-public class Spellbook {
+public abstract class Spellbook {
 	protected ArrayList<Spell> spells;
 	protected int criticChance; // between 0 and 99
 	protected String name;
