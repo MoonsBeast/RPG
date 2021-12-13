@@ -12,7 +12,8 @@ import weapons.*;
 
 public class FromInputCharacterFactory implements CharacterFactory {
 	
-	protected String race, rolClas, weaponRight, weaponLeft, spellBook;	
+	protected String race, rolClas, weaponRight, weaponLeft, spellBook;
+	
 	public FromInputCharacterFactory(String race, String rolClas, String weaponRight, String weaponLeft, String spellBook) {
 		this.race = race;
 		this.rolClas = rolClas;
@@ -20,7 +21,12 @@ public class FromInputCharacterFactory implements CharacterFactory {
 		this.weaponLeft = weaponLeft;
 		this.spellBook = spellBook;
 	}
-
+	
+	/**
+	 * Tries to infer the race base on a string
+	 * 
+	 * @param race race string to check
+	 * @return a Race Enum value if race matches any, null otherwise*/
 	protected Race stringToRace(String race) {
 		
 		for(Race testRace : Race.values()) {
@@ -34,6 +40,11 @@ public class FromInputCharacterFactory implements CharacterFactory {
 		return null;
 	}
 	
+	/**
+	 * Tries to infer the role base on a string
+	 * 
+	 * @param rolClass role string to check
+	 * @return a rolClass Enum value if rolClass matches any, null otherwise*/
 	protected RolClass stringToRolClass(String rolClass) {
 		
 		for(RolClass testRol : RolClass.values()) {
@@ -47,6 +58,11 @@ public class FromInputCharacterFactory implements CharacterFactory {
 		return null;
 	}
 	
+	/**
+	 * Tries to infer the weapon based on a string
+	 * 
+	 * @param weapon weapon string to check
+	 * @return a Weapon object if the weapon matches any, null otherwise*/
 	protected Weapon stringToWeapon(String weapon) {
 		
 		WeaponList weaponEnum = null;
@@ -99,6 +115,11 @@ public class FromInputCharacterFactory implements CharacterFactory {
 		return res;
 	}
 	
+	/**
+	 * Tries to infer the spellbook based on a string
+	 * 
+	 * @param book book string to check
+	 * @return a Spellbook object if the book matches any, null otherwise*/
 	protected Spellbook stringToBook(String book) {
 		
 		BookList bookEnum = null;
@@ -133,6 +154,10 @@ public class FromInputCharacterFactory implements CharacterFactory {
 		return res;
 	}
 	
+	/**
+	 * Equips the prefixed armor to a character based on its role
+	 * 
+	 * @param character character to dress*/
 	public static void armorUp(Character character) {
 		
 		Random random = new Random();
