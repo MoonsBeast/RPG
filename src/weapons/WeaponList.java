@@ -1,5 +1,7 @@
 package weapons;
 
+import graphics.Narrator;
+
 public enum WeaponList {
 	BOW,
 	DAGGER,

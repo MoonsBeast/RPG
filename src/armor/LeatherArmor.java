@@ -5,7 +5,7 @@ import combat.DamageType;
 
 public class LeatherArmor extends Armor {
 	
-	private Armor decoratedArmor;
+	protected Armor decoratedArmor;
 	
 	public LeatherArmor(Armor decoratedArmor, ArmorPart armorPart) {
 		super(1, armorPart);

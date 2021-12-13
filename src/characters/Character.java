@@ -16,7 +16,7 @@ public class Character {
 	protected String name; 
 	protected boolean isAlive = true; 
 	protected Race race;
-	protected RolClass rolClass;
+	protected RolClass roleClass;
 	protected Armor armor;
 	protected Weapon rightWeapon,leftWeapon;
 	protected Spellbook spellbook;
@@ -28,7 +28,7 @@ public class Character {
 		this.name = "Nobody";
 		this.level = 1;
 		this.race = Race.AVEN;
-		this.rolClass = RolClass.ARTIFICER;
+		this.roleClass = RolClass.ARTIFICER;
 		
 		populateTables();
 		this.armor = calculateBaseArmor();
@@ -39,11 +39,19 @@ public class Character {
 		this.actualMana = maxMana;
 	}
 	
-	public Character(String name, int level, Race race, RolClass rolClass) {
+	/**
+	 * Builds a character with a name, level, race and role, everything else gets a default value
+	 * 
+	 * @param name name of the character
+	 * @param level level of the character
+	 * @param race race of the character
+	 * @param rolClass role of the character
+	 * */
+	public Character(String name, int level, Race race, RolClass roleClass) {
 		this.name = name;
 		this.level = level;
 		this.race = race;
-		this.rolClass = rolClass;
+		this.roleClass = roleClass;
 		
 		populateTables();
 		this.armor = calculateBaseArmor();
@@ -54,11 +62,22 @@ public class Character {
 		this.actualMana = maxMana;
 	}
 	
-	public Character(String name, int level, Race race, RolClass rolClass, Weapon rightWeapon, Weapon leftWeapon, Spellbook spellbook) {
+	/**
+	 * Builds a character with a name, level, race, role. weapons right and left and spellbook, everything else gets a default value
+	 * 
+	 * @param name name of the character
+	 * @param level level of the character
+	 * @param race race of the character
+	 * @param rolClass role of the character
+	 * @param rigthWeapon right weapon of the character
+	 * @param leftWeapon left weapon of the character, if it is two handed it nulls the right weapon
+	 * @param spellbook spellbook of the character
+	 * */
+	public Character(String name, int level, Race race, RolClass roleClass, Weapon rightWeapon, Weapon leftWeapon, Spellbook spellbook) {
 		this.name = name;
 		this.level = level;
 		this.race = race;
-		this.rolClass = rolClass;
+		this.roleClass = roleClass;
 		this.setRightWeapon(rightWeapon);
 		this.setLeftWeapon(leftWeapon);
 		this.spellbook = spellbook;
@@ -72,6 +91,9 @@ public class Character {
 		this.actualMana = maxMana;
 	}
 	
+	/**
+	 * Populates the tables of base armor, life and mana
+	 * */
 	private void populateTables() {
 		
 		//Armor Table
@@ -136,18 +158,30 @@ public class Character {
 		
 	};
 	
+	/**
+	 * @return an Armor object to act as the base for armor decorators
+	 * */
 	private Armor calculateBaseArmor() {
 		return new SkinArmor(baseArmorTable.get(this.race));
 	}
 	
+	/**
+	 * @return an int value that indicates the max life based on level
+	 * */
 	private int calculateLife() {
 		return baseLifeTable.get(this.race) * this.level;
 	}
 	
+	/**
+	 * @return an int value that indicates the max mana based on level
+	 * */
 	private int calculateMana() {
-		return baseManaTable.get(this.rolClass) * this.level;
+		return baseManaTable.get(this.roleClass) * this.level;
 	}
 	
+	/**
+	 * Levels up the character and updates its life, mana and revives it if dead
+	 * */
 	public void levelUp() {
 		this.level++;
 		this.maxLife = calculateLife();
@@ -159,6 +193,9 @@ public class Character {
 		if(!this.isAlive) this.isAlive = true;
 	}
 	
+	/**
+	 * Levels down the character and updates its life, mana and revives it if dead
+	 * */
 	public void levelDown() {
 		this.level--;
 		this.maxLife = calculateLife();
@@ -170,39 +207,65 @@ public class Character {
 		if(!this.isAlive) this.isAlive = true;
 	}
 	
+	/**
+	 * Checks if the character has equipped the part
+	 * 
+	 * @param armorPart part to check
+	 * */
 	public boolean checkIfPartIsEquiped(ArmorPart armorPart) {
 		
 		return this.armor.checkIfPartIsEquiped(armorPart);
 	}
 	
+	/**
+	 * @return true if the character's rightWeapon is not null else false
+	 * */
 	public boolean canDoAttackWithRightHand() {
 		
 		return this.rightWeapon != null;
 	}
 	
+	/**
+	 * @return true if the character's leftWeapon is not null else false
+	 * */
 	public boolean canDoAttackWithLeftHand() {
 		
 		return this.leftWeapon != null;
 	}
 	
+	/**
+	 * @return true if the character's spellBook is not null else false
+	 * */
 	public boolean canCast() {
 		
 		return this.spellbook != null;
 	}
 	
+	/**
+	 * @return true if the character can attack with its right or left weapon else false
+	 * */
 	public boolean canDoMelee() {
 		
 		return canDoAttackWithRightHand() || canDoAttackWithLeftHand();
 	}
 	
+	/**
+	 * @return a Melee object contained on the rigthWeapon
+	 * */
 	public Melee attackWithRight(){
 		return this.rightWeapon.doAttack();
 	}
 	
+	/**
+	 * @return a Melee object contained on the leftWeapon
+	 * */
 	public Melee attackWithLeft(){
 		return this.leftWeapon.doAttack();
 	}
 	
+	/**
+	 * @return a random Spell object contained on the spellBook
+	 * */
 	public Spell attackWithMagic(){
 		
 		Spell result = this.spellbook.castRandomSpell(this.actualMana);
@@ -210,30 +273,41 @@ public class Character {
 		return result;
 	}
 	
+	/**
+	 * @return true if the character's role is bard, wizard, sorcerer, cleric, paladin, druid or warlock else false
+	 * */
 	public boolean isCaster() {
 		
-		return this.rolClass == RolClass.BARD || 
-				this.rolClass == RolClass.WIZARD || 
-				this.rolClass == RolClass.SORCERER || 
-				this.rolClass == RolClass.CLERIC || 
-				this.rolClass == RolClass.PALADIN ||
-				this.rolClass == RolClass.DRUID || 
-				this.rolClass == RolClass.WARLOCK;
+		return this.roleClass == RolClass.BARD || 
+				this.roleClass == RolClass.WIZARD || 
+				this.roleClass == RolClass.SORCERER || 
+				this.roleClass == RolClass.CLERIC || 
+				this.roleClass == RolClass.PALADIN ||
+				this.roleClass == RolClass.DRUID || 
+				this.roleClass == RolClass.WARLOCK;
 	}
 	
+	/**
+	 * @return true if the character's role is barbarian, artificer, fighter, monk, cleric, paladin, druid, ranger or rogue else false
+	 * */
 	public boolean isMelee() {
 		
-		return this.rolClass == RolClass.BARBARIAN || 
-				this.rolClass == RolClass.ARTIFICER || 
-				this.rolClass == RolClass.FIGHTER || 
-				this.rolClass == RolClass.MONK || 
-				this.rolClass == RolClass.CLERIC || 
-				this.rolClass == RolClass.PALADIN ||
-				this.rolClass == RolClass.DRUID ||
-				this.rolClass == RolClass.RANGER ||
-				this.rolClass == RolClass.ROGUE;
+		return this.roleClass == RolClass.BARBARIAN || 
+				this.roleClass == RolClass.ARTIFICER || 
+				this.roleClass == RolClass.FIGHTER || 
+				this.roleClass == RolClass.MONK || 
+				this.roleClass == RolClass.CLERIC || 
+				this.roleClass == RolClass.PALADIN ||
+				this.roleClass == RolClass.DRUID ||
+				this.roleClass == RolClass.RANGER ||
+				this.roleClass == RolClass.ROGUE;
 	}
 	
+	/**
+	 * Computes the damage dealt by an attack
+	 * 
+	 * @param attack the attack to process
+	 * */
 	public void calculateAttackRecieved(AttackAction attack) {
 		
 		int shieldBonus = 0;
@@ -310,11 +384,11 @@ public class Character {
 	}
 
 	public RolClass getRolClass() {
-		return rolClass;
+		return roleClass;
 	}
 
 	public void setRolClass(RolClass rolClass) {
-		this.rolClass = rolClass;
+		this.roleClass = rolClass;
 	}
 
 	public int getLevel() {

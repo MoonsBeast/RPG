@@ -290,6 +290,9 @@ public class GameManager implements Runnable{
 		spotlight.setSsm(null);
 		characterPosibleActions = 0;
 		timePassed = 0;
+		haveCasted = true;
+		haveUsedRightHand = true;
+		haveUsedLeftHand = true;
 		
 		CharacterSide targetSide = isFoeOnSpotlight ? enemies : allies;
 		targetSide.setVisibleOnIndex(true, turnBag.get(0) >= allies.getActorSize() ? turnBag.get(0) - allies.getActorSize() : turnBag.get(0));
