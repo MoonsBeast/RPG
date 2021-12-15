@@ -19,8 +19,14 @@ public abstract class Spellbook {
 
 	}
 	
+	/**
+	 * Clones the spells into a new arrayList but not been the same object
+	 * 
+	 *  @param spells spells to copy
+	 *  
+	 *  @return an ArrrayList of spells that are equal to the ones passed by argument but not been the same object*/
 	private ArrayList<Spell> copySpellsOnNewArray(ArrayList<Spell> spells){
-		//Copy the spells ito anothe array making diferent instances
+		//Copy the spells into another array making different instances
 		ArrayList<Spell> result = new ArrayList<Spell>();
 		
 		for(Spell spell : spells) {

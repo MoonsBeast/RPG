@@ -25,6 +25,7 @@ import weapons.WeaponList;
 
 public class StartMenu extends JPanel implements ActionListener{
 	
+	private static final long serialVersionUID = 1L;
 	protected ArrayList<JComboBox<String>> comboOptions;
 	protected ArrayList<String> casters, melee, hybrids;
 	protected Label topText;
@@ -118,11 +119,14 @@ public class StartMenu extends JPanel implements ActionListener{
 		add(acceptButton);
 	}
 	
+	/**Creates a character base on the enabled comboboxes of this window*/
 	public Character getCharacterFromImputs() {
 		FromInputCharacterFactory factory = new FromInputCharacterFactory((String)comboOptions.get(0).getSelectedItem(), (String)comboOptions.get(1).getSelectedItem(), (comboOptions.get(2).isEnabled()? (String)comboOptions.get(2).getSelectedItem() : null) , (comboOptions.get(3).isEnabled()? (String)comboOptions.get(3).getSelectedItem() : null), (comboOptions.get(4).isEnabled() ? (String)comboOptions.get(4).getSelectedItem() : null));
 		return factory.createCharacter(1);
 	}
 	
+	/**
+	 * Updates the description on the textarea*/
 	protected void changeDescription() {
 		
 		//Compose the string descrption of the character

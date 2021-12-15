@@ -14,7 +14,12 @@ public class CharacterSide extends VisualComponent implements Drawable{
 		
 		calculateActorPositionAndDimensions(characters,invertPos,sSheet);
 	}
-	
+	/**
+	 * Calculates and initializes the space for each character based on the total space of the component and the number of characters
+	 * 
+	 * @param characters characters to draw
+	 * @param invertPos whether the sprites have to look to the right(false) or the left(true)
+	 * @param sSheet sprite sheet for the characters*/
 	protected void calculateActorPositionAndDimensions(ArrayList<Character> characters, boolean invertPos, SpriteSheet sSheet) {
 		
 		Random random = new Random();
@@ -59,15 +64,29 @@ public class CharacterSide extends VisualComponent implements Drawable{
 		}
 	}
 	
+	/**
+	 * Clears the previous characters, sets the new ones and reevaluates the space
+	 * 
+	 * @param characters characters to draw
+	 * @param invertPos whether the sprites have to look to the right(false) or the left(true)
+	 * @param sSheet sprite sheet for the characters*/
 	public void setNewActors(ArrayList<Character> characters, boolean invertPos, SpriteSheet sSheet) {
 		this.actors.clear();
 		calculateActorPositionAndDimensions(characters,invertPos,sSheet);
 	}
 	
+	/**
+	 * @return a VisualComponent object of the first character*/
 	public synchronized VisualComponent getCharacterSpaceDimensions() {
 		return (VisualComponent)actors.get(0);
 	}
 	
+	
+	/**
+	 * Returns the index of a character to text
+	 * 
+	 * @param character character to look for
+	 * @return the int value of the index of the character or -1 if not found*/
 	public synchronized int getCharacterPosition(Character character) {
 		
 		int count = 0;
@@ -81,11 +100,13 @@ public class CharacterSide extends VisualComponent implements Drawable{
 		}
 		return -1;
 	}
-	
+	/**
+	 * @return the int value of actor in action*/
 	public synchronized int getActorSize() {
 		return this.actors.size();
 	}
-	
+	/**
+	 * @return an array list of character on the object that are alive*/
 	public synchronized ArrayList<Character> getAliveActors() {
 		return new ArrayList<Character>(actors.stream().filter(actor -> actor.getCharacter().isAlive()).map(space -> space.getCharacter()).toList());
 	}
@@ -122,6 +143,8 @@ public class CharacterSide extends VisualComponent implements Drawable{
 		this.actors.get(index).setSpiteSheet(spiteSheet);
 	}
 	
+	/**
+	 * Levels up every character and sets the state to IDLE*/
 	public synchronized void levelUpEveryone() {
 		this.actors.forEach((actor) -> {
 			actor.getCharacter().levelUp();

@@ -155,7 +155,7 @@ public class FromInputCharacterFactory implements CharacterFactory {
 	}
 	
 	/**
-	 * Equips the prefixed armor to a character based on its role
+	 * Equips the prefixed set of armor to a character based on its role
 	 * 
 	 * @param character character to dress*/
 	public static void armorUp(Character character) {

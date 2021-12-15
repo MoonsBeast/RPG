@@ -54,6 +54,10 @@ public class RandomCharacterFactory implements CharacterFactory {
 		return character;
 	}
 	
+	/**
+	 * Equips the prefixed set of armor to a character based on its role
+	 * 
+	 * @param character character to dress*/
 	public static void armorUp(Character character) {
 		
 		ArrayList<ArmorPart> parts = new ArrayList<>();
@@ -277,6 +281,10 @@ public class RandomCharacterFactory implements CharacterFactory {
 		
 	}
 	
+	/**
+	 * Equips the prefixed set of weapon/s to a character based on its role
+	 * 
+	 * @param character character to dress*/
 	public void weaponUp(Character character) {
 
 		ArrayList<Spellbook> books = new ArrayList<>();

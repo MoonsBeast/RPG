@@ -2,10 +2,6 @@ package gameLogic;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -13,11 +9,9 @@ import java.util.Collections;
 import java.util.Random;
 
 import characters.RandomCharacterFactory;
-import characters.RolClass;
 import combat.AttackAction;
 import combat.DamageType;
 import characters.Character;
-import characters.Race;
 import graphics.CharacterSide;
 import graphics.CharacterSpace;
 import graphics.GUIManager;
@@ -58,6 +52,8 @@ public class GameManager implements Runnable{
 		this.windowHeight = height;
 	}
 	
+	/**
+	 * Initializes all necessary components for the game to run properly*/
 	private void init() {
 		
 		//Initializes all necessary components
@@ -109,6 +105,13 @@ public class GameManager implements Runnable{
 
 	}
 	
+	/**
+	 * Generates n random characters of the desired level
+	 * 
+	 * @param amount amount of characters
+	 * @param level level of the characters
+	 * 
+	 * @return An ArrayList object of Character objects of length equal to amount*/
 	private ArrayList<Character> generateRandomCharacter(int amount, int level){
 		RandomCharacterFactory factory = new RandomCharacterFactory();
 		ArrayList<Character> res = new ArrayList<Character>();
@@ -120,6 +123,8 @@ public class GameManager implements Runnable{
 		return res;
 	}
 	
+	/**
+	 * Calculates the next state of the game */
 	private void tick() {//Calculus of the next game state
 		
 		if(!isProtagonistLoaded) { //If the canvas is placed, the character selection is finished
@@ -265,6 +270,8 @@ public class GameManager implements Runnable{
 
 	}
 	
+	/**
+	 * Levels up the heroes and generates a new set of enemies of level equal to the heroes */
 	private synchronized void generateNextRound() {
 		
 		narrator.setMainText("La ronda ha acabado. Ganan los " + (isFoeOnSpotlight ? "villanos" : "heroes") + ".");
@@ -283,6 +290,8 @@ public class GameManager implements Runnable{
 		
 	}
 	
+	/**
+	 * Reset all combat values and return the character to its original position*/
 	private synchronized void endTurn() {
 		spotlight.setVisible(false);
 		spotlight.setCharacter(null);
@@ -299,6 +308,10 @@ public class GameManager implements Runnable{
 		turnBag.remove(0);
 	}
 	
+	/**
+	 * Checks if a tooltip has to be drawn and draws it
+	 * 
+	 * @param brush a Graphics object to draw on a canvas*/
 	private synchronized void checkAndDrawTooltip(Graphics brush) {
 		
 		boolean drawTooltip = false, drawDownwards = true;
@@ -346,7 +359,9 @@ public class GameManager implements Runnable{
 			tooltip.draw(brush);
 		}
 	}
-
+	
+	/**
+	 * Draws all the visual components*/
 	private void render() {
 		
 		//Draw everything	
@@ -376,6 +391,8 @@ public class GameManager implements Runnable{
 		graph.dispose();
 	}
 	
+	/**
+	 * Initializes and runs the game loop*/
 	public void run() {
 		
 		init();
@@ -391,6 +408,8 @@ public class GameManager implements Runnable{
 		stop();
 	}
 	
+	/**
+	 * Starts the game loop*/
 	public synchronized void start() {
 		
 		if(run) return;
@@ -400,6 +419,8 @@ public class GameManager implements Runnable{
 		thread.start();
 	}
 	
+	/**
+	 * Stops the game loops*/
 	public synchronized void stop() {
 		
 		if(!run) return;

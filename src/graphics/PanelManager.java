@@ -17,7 +17,8 @@ import characters.Character;
 import characters.FromInputCharacterFactory;
 
 public class PanelManager extends JPanel implements ActionListener{
-	
+
+	private static final long serialVersionUID = 1L;
 	protected boolean isCanvasInPlace = false;
 	protected StartMenu menuPanel;
 	protected Canvas gameCanvas;

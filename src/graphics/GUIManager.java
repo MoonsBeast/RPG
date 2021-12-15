@@ -42,7 +42,7 @@ public class GUIManager {
 		this.defaultHeight = height;
 		setup();
 	}
-	
+	/**setups the game window*/
 	public void setup() {
 		
 		Dimension size = new Dimension(defaultWidth,defaultHeight);

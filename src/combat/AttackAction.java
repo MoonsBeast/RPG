@@ -27,6 +27,8 @@ public class AttackAction implements Cloneable{
 		this.isCritic = attack.isCritic;
 	}
 	
+	/**
+	 * @return the total damage after calculating if it critic*/
 	public int getProcessedDamageValue() {
 		return isCritic ? damageValue*2 : damageValue;
 	}
